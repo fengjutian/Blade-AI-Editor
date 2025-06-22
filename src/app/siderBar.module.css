@@ -1,0 +1,6 @@
+.siderBarWrap{
+    /* background: lightblue; */
+    width: 200px;
+    height: 100vh;
+    border-right: 1px dashed lightblue;
+}
