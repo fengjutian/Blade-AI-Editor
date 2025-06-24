@@ -28,25 +28,9 @@ const Page = () => {
         <Panel defaultSize={12} style={{ background: '#f0f0f0', border: '1px solid red' }}>
           <SiderBar/>
         </Panel>
-        <PanelResizeHandle style={{ border: '1px solid red' }}/>
+        <PanelResizeHandle/>
         <Panel style={{ border: '1px solid red' }}>
-          <PanelGroup direction="vertical">
-            <Panel style={{ border: '1px solid red' }}>
-              top
-            </Panel>
-            <PanelResizeHandle />
-            <Panel>
-              <PanelGroup direction="horizontal">
-                <Panel style={{ border: '1px solid red' }}>
-                  left
-                </Panel>
-                <PanelResizeHandle />
-                <Panel>
-                  right
-                </Panel>
-              </PanelGroup>
-            </Panel>
-          </PanelGroup>
+          <EditorCore id='1'/>
         </Panel>
         <PanelResizeHandle />
         <Panel defaultSize={12} style={{ border: '1px solid red' }}>
