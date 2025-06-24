@@ -25,19 +25,19 @@ const Page = () => {
   return (
     <>
       <PanelGroup direction="horizontal">
-        <Panel>
-          left
+        <Panel defaultSize={12} style={{ background: '#f0f0f0', border: '1px solid red' }}>
+          <SiderBar/>
         </Panel>
-        <PanelResizeHandle />
-        <Panel>
+        <PanelResizeHandle style={{ border: '1px solid red' }}/>
+        <Panel style={{ border: '1px solid red' }}>
           <PanelGroup direction="vertical">
-            <Panel>
+            <Panel style={{ border: '1px solid red' }}>
               top
             </Panel>
             <PanelResizeHandle />
             <Panel>
               <PanelGroup direction="horizontal">
-                <Panel>
+                <Panel style={{ border: '1px solid red' }}>
                   left
                 </Panel>
                 <PanelResizeHandle />
@@ -49,8 +49,8 @@ const Page = () => {
           </PanelGroup>
         </Panel>
         <PanelResizeHandle />
-        <Panel>
-          right
+        <Panel defaultSize={12} style={{ border: '1px solid red' }}>
+          right1111
         </Panel>
       </PanelGroup>
     </>

@@ -58,6 +58,7 @@
     "@radix-ui/react-slot": "^1.2.3",
     "@radix-ui/react-toolbar": "^1.1.10",
     "@radix-ui/react-tooltip": "^1.2.7",
+    "@tabler/icons-react": "^3.34.0",
     "@udecode/cn": "^48.0.3",
     "@udecode/plate-ai": "^49.0.0",
     "@udecode/plate-basic-marks": "^49.0.0",
