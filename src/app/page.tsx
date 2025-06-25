@@ -26,7 +26,7 @@ const Page = () => {
   return (
     <>
       <PanelGroup direction="horizontal">
-        <Panel defaultSize={12} style={{ minWidth: '160px' }}>
+        <Panel defaultSize={12} style={{ width: '160px',  }}>
           <SiderBar exportDoc={exportDoc}/>
         </Panel>
         <PanelResizeHandle/>
