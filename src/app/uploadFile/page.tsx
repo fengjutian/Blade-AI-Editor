@@ -87,6 +87,24 @@ const UploadFile: React.FC = () => {
       });
   };
 
+  const readFileList = () => {
+      fetch('/api/files', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('File list:', data);
+        message.success('File list fetched successfully');
+      })
+      .catch(error => {
+        console.error('Error fetching file list:', error);
+        message.error('Failed to fetch file list');
+      });
+  }
+
   return (
     <Flex gap="middle" wrap>
       <Upload
@@ -103,7 +121,7 @@ const UploadFile: React.FC = () => {
 
       <Button  type="primary" onClick={getUser}>接口测试</Button>
       <Button  type="primary" onClick={createFile}>创建文件</Button>
-      <Button  type="primary" onClick={getUser}>获取文件</Button>
+      <Button  type="primary" onClick={readFileList}>读取文件列表</Button>
 
 
 
