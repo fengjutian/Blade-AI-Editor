@@ -34,9 +34,9 @@ const Page = () => {
           <EditorCore id={curDoc.id}  content={curDoc.content}/>
         </Panel>
         <PanelResizeHandle />
-        <Panel defaultSize={12} style={{ border: '1px solid red' }}>
+        {/* <Panel defaultSize={12} style={{ border: '1px solid red' }}>
           right1111
-        </Panel>
+        </Panel> */}
       </PanelGroup>
     </>
   )
