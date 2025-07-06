@@ -57,10 +57,6 @@ const UploadFile: React.FC = () => {
       headers: {
         'Content-Type': 'application/json',
       },
-      // body: JSON.stringify({
-      //   id: '123',
-      //   name: '123'
-      // }),
     })
       .then(data => {
         console.log('User data:', data);
@@ -69,6 +65,25 @@ const UploadFile: React.FC = () => {
       .catch(error => {
         console.error('Error fetching user:', error);
         message.error('Failed to fetch user');
+      });
+  };
+
+
+  const createFile = () => {
+    fetch('/api/files', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log('File created:', data);
+        message.success('File created successfully');
+      })
+      .catch(error => {
+        console.error('Error creating file:', error);
+        message.error('Failed to create file');
       });
   };
 
@@ -86,11 +101,11 @@ const UploadFile: React.FC = () => {
         {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
       </Upload>
 
-      <Button
-        type="primary"
-      onClick={getUser}>
-      接口测试
-      </Button>
+      <Button  type="primary" onClick={getUser}>接口测试</Button>
+      <Button  type="primary" onClick={createFile}>创建文件</Button>
+      <Button  type="primary" onClick={getUser}>获取文件</Button>
+
+
 
     </Flex>
   );
