@@ -30,7 +30,7 @@ const Page = () => {
           <SiderBar exportDoc={exportDoc}/>
         </Panel>
         <PanelResizeHandle/>
-        <Panel style={{ border: '1px solid red' }}>
+        <Panel>
           <EditorCore id={curDoc.id}  content={curDoc.content}/>
         </Panel>
         <PanelResizeHandle />

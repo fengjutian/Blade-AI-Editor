@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { NextResponse } from 'next/server';
+import { v4 as uuidv4 } from 'uuid';
  
 // export default function handler(req, res) {
 //     const filePath = path.join(process.cwd(), 'public', 'newFile.txt');
@@ -51,8 +52,9 @@ export async function GET(request: Request) {
 
 
 export async function POST(request: Request, res: Response) {
-    const time = new Date()
-    const fileName = `/docs/newFile-${time.getTime()}.md`;
+    // const time = new Date()
+    const randomUUID = uuidv4();
+    const fileName = `/docs/newFile-${randomUUID}.md`;
     const filePath = path.join(process.cwd(), 'public', fileName);
     const content = 'This is a new file created by Next.js.';
     fs.writeFile(filePath, content, 'utf8', (err) => {

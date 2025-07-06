@@ -4,34 +4,26 @@ import { IconGitBranch } from "@tabler/icons-react";
 import React, { useState } from "react";
 import { DocItem, SiderBarProps } from "@/app/PageType";
 // import readData from "@/utils/readData";
-import readData from "../../readData";
+// import readData from "../../readData";
 import { useEffect } from "react";
 
 
 const SiderBar = (props: SiderBarProps) => {
     const { exportDoc} = props;
 
-    const notebookPath = "notebooks";
-    async function getStaticProps() {
-        const notebookData = await readData(`/DB/${notebookPath}`);
-        const notebook = notebookData?.data;
+    // const notebookPath = "notebooks";
+    // async function getStaticProps() {
+    //     const notebookData = await readData(`/DB/${notebookPath}`);
+    //     const notebook = notebookData?.data;
 
-        console.log('notebook', notebook);
-        return {
-            props: {
-            notebook,
-            hallo: ["nice"],
-            },
-        };
-    }
-
-
-    useEffect(() => {
-        getStaticProps()
-    }, [])
-
-
-
+    //     console.log('notebook', notebook);
+    //     return {
+    //         props: {
+    //         notebook,
+    //         hallo: ["nice"],
+    //         },
+    //     };
+    // }
 
     const [doc, setDoc] = useState<DocItem[]>([
         {
@@ -72,6 +64,32 @@ const SiderBar = (props: SiderBarProps) => {
             ]
         }
     ]);
+
+    const getFilesList = async () => {
+        fetch('/api/files', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }).then(response => response.json())
+        .then(data => {
+            console.log('File created:', data);
+            if(data.status === 200){
+
+            }
+
+            // message.success('File created successfully');
+        })
+        .catch(error => {
+         console.error('Error creating file:', error);
+
+        });
+    }
+
+    useEffect(() => {
+        // getStaticProps();
+        getFilesList();
+    }, [])
 
 
     // 新建文档
