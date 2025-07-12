@@ -25,6 +25,29 @@ const SiderBar = (props: SiderBarProps) => {
     //     };
     // }
 
+    // 获取文档列表
+    const getDocsList = () => {
+        fetch('/api/docs', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }).then(response => response.json())
+        .then(data => {
+            console.log('File created:', data);
+            if(data.status === 200){
+
+            }
+
+            // message.success('File created successfully');
+        })
+        .catch(error => {
+         console.error('Error creating file:', error);
+
+        });
+
+    };
+
     const [doc, setDoc] = useState<DocItem[]>([
         {
             title: '文档1',
@@ -87,6 +110,7 @@ const SiderBar = (props: SiderBarProps) => {
     }
 
     useEffect(() => {
+        getDocsList();
         // getStaticProps();
         getFilesList();
     }, [])

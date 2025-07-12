@@ -1,13 +1,14 @@
 import type { NextConfig } from "next";
 import path from 'path';
+// require('dotenv').config();
+// import dotenv from 'dotenv'
 
 const nextConfig: NextConfig = {
-    future: {
-      webpack5: true, // by default, if you customize webpack config, they switch back to version 4.
-        // Looks like backward compatibility approach.
-    },
-  /* config options here */
-   webpack: (config,
+  future: {
+    webpack5: true, // by default, if you customize webpack config, they switch back to version 4.
+      // Looks like backward compatibility approach.
+  },
+  webpack: (config,
     { buildId, dev, isServer, defaultLoaders, nextRuntime, webpack }) => {
     config.resolve.alias = {
       ...config.resolve.alias,
