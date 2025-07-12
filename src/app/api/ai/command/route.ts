@@ -6,6 +6,7 @@ import { InvalidArgumentError } from '@ai-sdk/provider';
 import { delay as originalDelay } from '@ai-sdk/provider-utils';
 import { convertToCoreMessages, streamText } from 'ai';
 import { NextResponse } from 'next/server';
+import ollama from 'ollama';
 
 /**
  * Detects the first chunk in a buffer.
@@ -129,86 +130,121 @@ const CHUNKING_REGEXPS = {
 };
 
 export async function POST(req: NextRequest) {
-  const { apiKey: key, messages, system } = await req.json();
+  console.log('进入这里22222', req)
 
-  const apiKey = key || process.env.OPENAI_API_KEY;
+  // const { apiKey: key, messages, system } = await req.json();
 
-  if (!apiKey) {
-    return NextResponse.json(
-      { error: 'Missing OpenAI API key.' },
-      { status: 401 }
-    );
-  }
+  // const apiKey = key || process.env.OPENAI_API_KEY;
 
-  const openai = createOpenAI({ apiKey });
+  // if (!apiKey) {
+  //   return NextResponse.json(
+  //     { error: 'Missing OpenAI API key.' },
+  //     { status: 401 }
+  //   );
+  // }
 
-  let isInCodeBlock = false;
-  let isInTable = false;
-  let isInList = false;
-  let isInLink = false;
+  // const openai = createOpenAI({ apiKey });
+
+  // let isInCodeBlock = false;
+  // let isInTable = false;
+  // let isInList = false;
+  // let isInLink = false;
   try {
-    const result = streamText({
-      experimental_transform: smoothStream({
-        chunking: (buffer) => {
-          // Check for code block markers
-          if (/```[^\s]+/.test(buffer)) {
-            isInCodeBlock = true;
-          } else if (isInCodeBlock && buffer.includes('```')) {
-            isInCodeBlock = false;
-          }
-          // test case: should not deserialize link with markdown syntax
-          if (buffer.includes('http')) {
-            isInLink = true;
-          } else if (buffer.includes('https')) {
-            isInLink = true;
-          } else if (buffer.includes('\n') && isInLink) {
-            isInLink = false;
-          }
-          if (buffer.includes('*') || buffer.includes('-')) {
-            isInList = true;
-          } else if (buffer.includes('\n') && isInList) {
-            isInList = false;
-          }
-          // Simple table detection: enter on |, exit on double newline
-          if (!isInTable && buffer.includes('|')) {
-            isInTable = true;
-          } else if (isInTable && buffer.includes('\n\n')) {
-            isInTable = false;
-          }
 
-          // Use line chunking for code blocks and tables, word chunking otherwise
-          // Choose the appropriate chunking strategy based on content type
-          let match;
+    console.log('进入这里')
 
-          if (isInCodeBlock || isInTable || isInLink) {
-            // Use line chunking for code blocks and tables
-            match = CHUNKING_REGEXPS.line.exec(buffer);
-          } else if (isInList) {
-            // Use list chunking for lists
-            match = CHUNKING_REGEXPS.list.exec(buffer);
-          } else {
-            // Use word chunking for regular text
-            match = CHUNKING_REGEXPS.word.exec(buffer);
-          }
-          if (!match) {
-            return null;
-          }
+    // const response = await fetch('http://localhost:11434', {
+    //     method: 'POST',
+    //     headers: {
+    //         'Content-Type': 'application/json'
+    //     },
+    //     body: JSON.stringify({
+    //         model: 'qwen2:7b',  // 选择要使用的模型
+    //         prompt: '南京'
+    //     })
+    // });
 
-          return buffer.slice(0, match.index) + match?.[0];
-        },
-        delayInMs: () => (isInCodeBlock || isInTable ? 100 : 30),
-      }),
-      maxTokens: 2048,
-      messages: convertToCoreMessages(messages),
-      model: openai('gpt-4o'),
-      system: system,
+    // const data = await response.json();
+
+    // console.log(11111111, data.response);  // 输出 Ollama 的回复
+
+    const response = await ollama.chat({
+      model: 'qwen2:7b',
+      messages: [{ role: 'user', content: '你是谁？' }],
     });
 
-    return result.toDataStreamResponse();
-  } catch {
+    console.log(response.message.content);
+
     return NextResponse.json(
-      { error: 'Failed to process AI request' },
-      { status: 500 }
+      { msg: response.message.content },
+      { status: 200 }
     );
+
+
+    // return response.message.content;
+
+    // const result = streamText({
+    //   experimental_transform: smoothStream({
+    //     chunking: (buffer) => {
+    //       // Check for code block markers
+    //       if (/```[^\s]+/.test(buffer)) {
+    //         isInCodeBlock = true;
+    //       } else if (isInCodeBlock && buffer.includes('```')) {
+    //         isInCodeBlock = false;
+    //       }
+    //       // test case: should not deserialize link with markdown syntax
+    //       if (buffer.includes('http')) {
+    //         isInLink = true;
+    //       } else if (buffer.includes('https')) {
+    //         isInLink = true;
+    //       } else if (buffer.includes('\n') && isInLink) {
+    //         isInLink = false;
+    //       }
+    //       if (buffer.includes('*') || buffer.includes('-')) {
+    //         isInList = true;
+    //       } else if (buffer.includes('\n') && isInList) {
+    //         isInList = false;
+    //       }
+    //       // Simple table detection: enter on |, exit on double newline
+    //       if (!isInTable && buffer.includes('|')) {
+    //         isInTable = true;
+    //       } else if (isInTable && buffer.includes('\n\n')) {
+    //         isInTable = false;
+    //       }
+
+    //       // Use line chunking for code blocks and tables, word chunking otherwise
+    //       // Choose the appropriate chunking strategy based on content type
+    //       let match;
+
+    //       if (isInCodeBlock || isInTable || isInLink) {
+    //         // Use line chunking for code blocks and tables
+    //         match = CHUNKING_REGEXPS.line.exec(buffer);
+    //       } else if (isInList) {
+    //         // Use list chunking for lists
+    //         match = CHUNKING_REGEXPS.list.exec(buffer);
+    //       } else {
+    //         // Use word chunking for regular text
+    //         match = CHUNKING_REGEXPS.word.exec(buffer);
+    //       }
+    //       if (!match) {
+    //         return null;
+    //       }
+
+    //       return buffer.slice(0, match.index) + match?.[0];
+    //     },
+    //     delayInMs: () => (isInCodeBlock || isInTable ? 100 : 30),
+    //   }),
+    //   maxTokens: 2048,
+    //   messages: convertToCoreMessages(messages),
+    //   model: openai('gpt-4o'),
+    //   system: system,
+    // });
+
+    // return result.toDataStreamResponse();
+  } catch {
+    // return NextResponse.json(
+    //   { error: 'Failed to process AI request' },
+    //   { status: 500 }
+    // );
   }
 }

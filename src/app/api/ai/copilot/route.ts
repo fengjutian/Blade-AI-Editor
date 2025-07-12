@@ -5,6 +5,7 @@ import { generateText } from 'ai';
 import { NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
+  console.log('进入这里11111')
   const {
     apiKey: key,
     model = 'gpt-4o-mini',
@@ -21,17 +22,17 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const openai = createOpenAI({ apiKey });
+  // const openai = createOpenAI({ apiKey });
 
   try {
-    const result = await generateText({
-      abortSignal: req.signal,
-      maxTokens: 50,
-      model: openai(model),
-      prompt: prompt,
-      system,
-      temperature: 0.7,
-    });
+    // const result = await generateText({
+    //   abortSignal: req.signal,
+    //   maxTokens: 50,
+    //   model: openai(model),
+    //   prompt: prompt,
+    //   system,
+    //   temperature: 0.7,
+    // });
 
     return NextResponse.json(result);
   } catch (error) {
