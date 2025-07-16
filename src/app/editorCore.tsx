@@ -9,9 +9,6 @@ import { EditorKit } from '@/components/editor/editor-kit';
 import { Editor, EditorContainer } from '@/components/ui/editor';
 
 import { setNodes } from 'slate';
-// import { log } from 'node:console';
-
-// import { DEMO_VALUES } from './values/demo-values';
 
 export default function EditorCore({ id, content }: { id: string; content: any[] }) {
   const [value, setValue] = React.useState<any[]>([]);
