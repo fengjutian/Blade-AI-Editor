@@ -11,20 +11,6 @@ import { useEffect } from "react";
 const SiderBar = (props: SiderBarProps) => {
     const { exportDoc} = props;
 
-    // const notebookPath = "notebooks";
-    // async function getStaticProps() {
-    //     const notebookData = await readData(`/DB/${notebookPath}`);
-    //     const notebook = notebookData?.data;
-
-    //     console.log('notebook', notebook);
-    //     return {
-    //         props: {
-    //         notebook,
-    //         hallo: ["nice"],
-    //         },
-    //     };
-    // }
-
     // 获取文档列表
     const getDocsList = () => {
         fetch('/api/docs', {
