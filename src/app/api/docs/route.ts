@@ -1,9 +1,14 @@
 import pool from '../../db';
-import { NextResponse } from 'next/server'
+import { NextResponse } from 'next/server';
+import { PrismaClient } from "@prisma/client";
 
-export async function GET(request) {
-  return new Response("hello", {
+const prisma = new PrismaClient();
+export async function GET() {
+
+  const docs = await prisma.docs.findMany();
+  return new Response(JSON.stringify(docs), {
     status: 200,
+    headers: { 'Content-Type': 'application/json' }
   });
 }
 

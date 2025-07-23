@@ -49,7 +49,6 @@
     "@platejs/table": "^49.0.1",
     "@platejs/toc": "^49.0.0",
     "@platejs/toggle": "^49.0.0",
-    "@prisma/client": "^6.12.0",
     "@radix-ui/react-alert-dialog": "^1.1.14",
     "@radix-ui/react-avatar": "^1.1.10",
     "@radix-ui/react-checkbox": "^1.3.2",
@@ -106,6 +105,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@prisma/client": "^6.12.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",

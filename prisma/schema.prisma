@@ -6,7 +6,7 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
+  // output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -21,6 +21,12 @@ model User {
   posts Post[]
 }
 
+model Docs {
+  id    Int     @id @default(autoincrement())
+  title String  @unique
+  content  String @db.Text
+}
+
 model Post {
   id        Int     @id @default(autoincrement())
   title     String
@@ -28,4 +34,10 @@ model Post {
   published Boolean @default(false)
   authorId  Int
   author    User    @relation(fields: [authorId], references: [id])
+}
+
+model auth {
+  id    Int     @id @default(autoincrement())
+  title String  @unique
+  ctx  String?
 }

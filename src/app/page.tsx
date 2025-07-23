@@ -1,17 +1,15 @@
 'use client';
 
-import SiderBar from "./siderBar";
-import EditorCore from "./editorCore";
-import styles from './page.module.css';
-
-
 import {
   PanelGroup,
   Panel,
   PanelResizeHandle,
 } from "react-resizable-panels"
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DocItem } from "@/app/PageType";
+import SiderBar from "./siderBar";
+import EditorCore from "./editorCore";
+import styles from './page.module.css';
 
 const Page = () => {
   const [doc, setDoc] = useState<DocItem[]>([]);
@@ -21,6 +19,14 @@ const Page = () => {
     console.log('export doc', data);
     setCurDoc(data);
   };
+
+  useEffect(() => {
+    fetch('/api/user')
+    .then(response => response.json())
+    .then(data => {
+      console.log('data', data);
+    })
+  }, []);
 
 
   return (

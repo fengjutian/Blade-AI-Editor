@@ -11,29 +11,6 @@ import { useEffect } from "react";
 const SiderBar = (props: SiderBarProps) => {
     const { exportDoc} = props;
 
-    // 获取文档列表
-    const getDocsList = () => {
-        fetch('/api/docs', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        }).then(response => response.json())
-        .then(data => {
-            console.log('File created:', data);
-            if(data.status === 200){
-
-            }
-
-            // message.success('File created successfully');
-        })
-        .catch(error => {
-         console.error('Error creating file:', error);
-
-        });
-
-    };
-
     const [doc, setDoc] = useState<DocItem[]>([
         {
             title: '文档1',
@@ -50,29 +27,54 @@ const SiderBar = (props: SiderBarProps) => {
                 }
             ]
         },
-        {
-            title: '文档2',
-            id: 'doc2',
-            content: [
-                {
-                    children: [{ text: 'Title' }],
-                    type: 'h3',
-                },
-                {
-                children: [{ text: 'This is a quote.' }],
-                type: 'blockquote',
-                },
-                {
-                children: [
-                    { text: 'With some ' },
-                    { bold: true, text: 'bold' },
-                    { text: ' text for emphasis!' },
-                ],
-                type: 'p',
-                },
-            ]
-        }
+        // {
+        //     title: '文档2',
+        //     id: 'doc2',
+        //     content: [
+        //         {
+        //             children: [{ text: 'Title' }],
+        //             type: 'h3',
+        //         },
+        //         {
+        //         children: [{ text: 'This is a quote.' }],
+        //         type: 'blockquote',
+        //         },
+        //         {
+        //         children: [
+        //             { text: 'With some ' },
+        //             { bold: true, text: 'bold' },
+        //             { text: ' text for emphasis!' },
+        //         ],
+        //         type: 'p',
+        //         },
+        //     ]
+        // }
     ]);
+
+    // 获取文档列表
+    const getDocsList = () => {
+        fetch('/api/docs', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }).then(response => response.json())
+        .then(data => {
+            console.log('123:', data);
+      
+            setDoc(data);
+            
+
+            // message.success('File created successfully');
+        })
+        .catch(error => {
+         console.error('Error creating file:', error);
+
+        });
+
+    };
+
+
 
     const getFilesList = async () => {
         fetch('/api/files', {
@@ -111,6 +113,7 @@ const SiderBar = (props: SiderBarProps) => {
 
     const selectedDoc = (item: DocItem) => {
         console.log('selected doc', item);
+        item.content = JSON.parse(item?.content);
         exportDoc(item);
     }
 
