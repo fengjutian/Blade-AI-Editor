@@ -22,7 +22,9 @@ AI-editor
 - webDAV 同步文件到网盘
 -
 
+DATABASE_URL="mysql://root:fengjutian@localhost:3306/docs"
 
 
 
 
+npx prisma migrate dev --name init
