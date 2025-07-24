@@ -8,13 +8,20 @@ import {
 import React, { useEffect, useState } from "react";
 import { DocItem } from "@/app/PageType";
 import SiderBar from "./siderBar";
-import EditorCore from "./editorCore";
-import styles from './page.module.css';
 import EditorCtx from "@/pages/EditorCtx";
+import { Operator } from "@/app/scheme";
+
+// enum Operator {
+//   AllDoc = 'all-doc', // 所有的文档
+//   EditDoc = 'edit-doc', // 编辑文档
+// }
 
 const Page = () => {
-  const [doc, setDoc] = useState<DocItem[]>([]);
   const [curDoc, setCurDoc] = useState<DocItem>({ id: '', title: '', content: [] });
+
+  const [operator, setOperator] = useState<Operator>(Operator.AllDoc);
+
+  const [docList, setDocList] = useState<DocItem[]>([]);
 
   const exportDoc = (data: DocItem) => {
     console.log('export doc', data);
@@ -29,17 +36,20 @@ const Page = () => {
     })
   }, []);
 
+  const exportDocList = (data: DocItem[]) => {
+    setDocList(data);
+  };
+
 
   return (
     <>
       <PanelGroup direction="horizontal">
         <Panel defaultSize={12} style={{ width: '160px', maxWidth: '160px' }}>
-          <SiderBar exportDoc={exportDoc}/>
+          <SiderBar exportDoc={exportDoc}  exportDocList={exportDocList}/>
         </Panel>
         <PanelResizeHandle/>
         <Panel>
-          <EditorCtx/>
-          {/* <EditorCore id={curDoc.id}  content={curDoc.content}/> */}
+          <EditorCtx operator={operator} docList={docList}/>
         </Panel>
         <PanelResizeHandle />
         {/* <Panel defaultSize={12} style={{ border: '1px solid red' }}>

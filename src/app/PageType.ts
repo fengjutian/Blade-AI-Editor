@@ -8,4 +8,5 @@ export interface SiderBarProps {
     docList?: { title: string; id: string }[];
     addItemDoc?: () => void;
     exportDoc: (data: DocItem) => void;
+    exportDocList: (data: any) => void;
 }

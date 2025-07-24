@@ -4,3 +4,51 @@
   color: @primary;
   font-size: 32px;
 }
+
+
+.siderBarWrap{
+  /* background: lightblue; */
+  /* width: 180px; */
+  height: 100vh;
+  border-right: 1px dashed lightblue;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.addBtn{
+  margin-top: 20px;
+}
+
+.docItem{
+  width: 100%;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+  /* border: 1px solid lightblue; */
+}
+
+.docTitle{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.closeBtn{
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  text-align: center;
+  border-radius: 50%;
+  background-color: lightblue;
+  color: white;
+  cursor: pointer;
+}

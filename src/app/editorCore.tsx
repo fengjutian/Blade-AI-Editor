@@ -4,7 +4,6 @@ import * as React from 'react';
 import { useEffect } from 'react';
 
 import { Plate, usePlateEditor } from 'platejs/react';
-
 import { EditorKit } from '@/components/editor/editor-kit';
 import { Editor, EditorContainer } from '@/components/ui/editor';
 
@@ -12,7 +11,6 @@ import { setNodes } from 'slate';
 
 export default function EditorCore({ id, content }: { id: string; content: any[] }) {
   const [value, setValue] = React.useState<any[]>([]);
-
 
   const initialValue: any = content
 
@@ -22,11 +20,6 @@ export default function EditorCore({ id, content }: { id: string; content: any[]
       return  initialValue;
     },
   });
-
-
-  const docRender = () => {
-
-  }
 
   useEffect(() => {
     // 使用 setNodes 替换整个文档内容

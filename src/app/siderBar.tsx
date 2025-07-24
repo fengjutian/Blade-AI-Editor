@@ -10,27 +10,10 @@ import AddTips from "@/app/widgets/AddTips/index";
 
 
 const SiderBar = (props: SiderBarProps) => {
-    const { exportDoc} = props;
+    const { exportDoc, exportDocList } = props;
 
-    const [doc, setDoc] = useState<DocItem[]>([
-        // {
-        //     title: '文档1',
-        //     id: 'doc1',
-        //     content: [
-        //         {
-        //             "children": [
-        //                 {
-        //                     "text": "2222先色氨酸"
-        //                 }
-        //             ],
-        //             "type": "p",
-        //             "id": "uFH2jD2HJl"
-        //         }
-        //     ]
-        // }
-    ]);
+    const [doc, setDoc] = useState<DocItem[]>([]);
 
-    // 获取文档列表
     const getDocsList = () => {
         fetch('/api/docs', {
             method: 'GET',
@@ -40,7 +23,7 @@ const SiderBar = (props: SiderBarProps) => {
         }).then(response => response.json())
         .then(data => {
             console.log('123:', data);
-      
+
             setDoc(data);
         })
         .catch(error => {
@@ -76,12 +59,12 @@ const SiderBar = (props: SiderBarProps) => {
 
     const addDoc = () => {
         setDoc([...doc, { title: `新建文档`, id: `doc${doc.length + 1}`,content: [] }]);
+        exportDocList([...doc, { title: `新建文档`, id: `doc${doc.length + 1}`,content: [] }])
     };
 
     const selectedDoc = (item: DocItem) => {
         console.log('selected doc', item.content);
 
-        // const content = JSON.parse(s);
         item.content = JSON.parse(item?.content);
 
         console.log('item', item);
@@ -94,8 +77,6 @@ const SiderBar = (props: SiderBarProps) => {
 
         <AddTips/>
 
-
-
         <div>所有文档</div>
 
         <Button variant="outline" size="sm" className={styles.addBtn} onClick={addDoc}>
@@ -103,7 +84,7 @@ const SiderBar = (props: SiderBarProps) => {
             新建文档
         </Button>
 
-        {
+        {/* {
             doc.map((item, index) => (
                 <div key={index} className={styles.docItem} onClick={() => selectedDoc(item)}>
                     <span className={styles.docTitle}>{item.title}</span>
@@ -115,19 +96,7 @@ const SiderBar = (props: SiderBarProps) => {
                     </Button>
                 </div>
             ))
-        }
-
-    {/* <Accordion.Root type="single">
-		<Accordion.Item value="item-1">
-			<Accordion.Header>
-				<Accordion.Trigger className="AccordionTrigger">
-					<span>Trigger text</span>
-
-				</Accordion.Trigger>
-			</Accordion.Header>
-			<Accordion.Content>…</Accordion.Content>
-		</Accordion.Item>
-	</Accordion.Root> */}
+        } */}
 
     </div>)
 }

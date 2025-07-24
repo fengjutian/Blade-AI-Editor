@@ -2,10 +2,74 @@ import './index.module.css';
 import EditorCore from "@/app/editorCore";
 import React, { useEffect, useState } from "react";
 import { DocItem } from "@/app/PageType";
+import { Button } from "@/components/ui/button";
+import styles from './index.module.css';
+import { Operator } from "@/app/scheme";
 
-export default function EditorCtx() {
+export default function EditorCtx({ operator, docList }: { operator: Operator, docList: any }) {
   const [curDoc, setCurDoc] = useState<DocItem>({ id: '', title: '', content: [] });
-  return <div className="title">
-    <EditorCore id={curDoc.id}  content={curDoc.content}/> 
-  </div>;
+  const [doc, setDoc] = useState<DocItem[]>([]);
+
+  const [operatorState, setOperatorState] = useState<Operator>(operator);
+
+  const getDocsList = () => {
+    fetch('/api/docs', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    }).then(response => response.json())
+    .then(data => {
+        console.log('123:', data);
+
+        setDoc(data);
+    })
+    .catch(error => {
+     console.error('Error creating file:', error);
+
+    });
+  };
+
+  const selectedDoc = (item: DocItem) => {
+    console.log('selected doc', item.content);
+
+      item.content = JSON.parse(item?.content);
+
+      console.log('item', item);
+      // exportDoc(item);
+
+      setOperatorState(Operator.EditDoc);
+  }
+
+  useEffect(() => {
+      getDocsList();
+  }, [])
+
+  return (
+    <div className="title">
+
+      {
+        operatorState === Operator.AllDoc && (
+          docList.map((item: any, index: number) => (
+              <div key={index} className={styles.docItem} onClick={() => selectedDoc(item)}>
+                  <span className={styles.docTitle}>{item.title}</span>
+                  <Button variant="ghost" size="icon" className={styles.closeBtn} onClick={() => {
+                      const newDoc = doc.filter((_, i) => i !== index);
+                      setDoc(newDoc);
+                  }}>
+                    X
+                  </Button>
+              </div>
+          ))
+        )
+      }
+
+      {
+        operatorState === Operator.EditDoc && (
+          <EditorCore id={curDoc.id}  content={curDoc.content}/>
+        )
+      }
+
+    </div>
+  );
 }
