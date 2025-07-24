@@ -1,3 +1,4 @@
+'use client';
 import styles from './siderBar.module.css';
 import { Button } from "@/components/ui/button";
 import { IconGitBranch } from "@tabler/icons-react";
@@ -25,6 +26,7 @@ const SiderBar = (props: SiderBarProps) => {
             console.log('123:', data);
 
             setDoc(data);
+            exportDocList(data)
         })
         .catch(error => {
          console.error('Error creating file:', error);
@@ -59,17 +61,17 @@ const SiderBar = (props: SiderBarProps) => {
 
     const addDoc = () => {
         setDoc([...doc, { title: `新建文档`, id: `doc${doc.length + 1}`,content: [] }]);
-        exportDocList([...doc, { title: `新建文档`, id: `doc${doc.length + 1}`,content: [] }])
+        exportDocList([...doc, { title: `新建文档`, id: `doc${doc.length + 1}`,content: []}])
     };
 
-    const selectedDoc = (item: DocItem) => {
-        console.log('selected doc', item.content);
+    // const selectedDoc = (item: DocItem) => {
+    //     console.log('selected doc', item.content);
 
-        item.content = JSON.parse(item?.content);
+    //     item.content = JSON.parse(item?.content);
 
-        console.log('item', item);
-        exportDoc(item);
-    }
+    //     console.log('item', item);
+    //     exportDoc(item);
+    // }
 
     return (<div className={styles.siderBarWrap}>
 
@@ -84,19 +86,9 @@ const SiderBar = (props: SiderBarProps) => {
             新建文档
         </Button>
 
-        {/* {
-            doc.map((item, index) => (
-                <div key={index} className={styles.docItem} onClick={() => selectedDoc(item)}>
-                    <span className={styles.docTitle}>{item.title}</span>
-                    <Button variant="ghost" size="icon" className={styles.closeBtn} onClick={() => {
-                        const newDoc = doc.filter((_, i) => i !== index);
-                        setDoc(newDoc);
-                    }}>
-                        X
-                    </Button>
-                </div>
-            ))
-        } */}
+        <p>对话</p>
+
+        <p>日历</p>
 
     </div>)
 }

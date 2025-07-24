@@ -1,3 +1,5 @@
+'use client';
+
 import './index.module.css';
 import EditorCore from "@/app/editorCore";
 import React, { useEffect, useState } from "react";
@@ -5,10 +7,11 @@ import { DocItem } from "@/app/PageType";
 import { Button } from "@/components/ui/button";
 import styles from './index.module.css';
 import { Operator } from "@/app/scheme";
+import { List } from '@douyinfe/semi-ui';
 
-export default function EditorCtx({ operator, docList }: { operator: Operator, docList: any }) {
+export default function EditorCtx({ operator, docList }: { operator: Operator, docList: DocItem[] }) {
   const [curDoc, setCurDoc] = useState<DocItem>({ id: '', title: '', content: [] });
-  const [doc, setDoc] = useState<DocItem[]>([]);
+  const [doc, setDoc] = useState<DocItem[]>(docList); // initialize from props
 
   const [operatorState, setOperatorState] = useState<Operator>(operator);
 
@@ -33,12 +36,13 @@ export default function EditorCtx({ operator, docList }: { operator: Operator, d
   const selectedDoc = (item: DocItem) => {
     console.log('selected doc', item.content);
 
-      item.content = JSON.parse(item?.content);
+      item.content = Array.isArray(item?.content) ? [] : JSON.parse(item?.content);
 
       console.log('item', item);
       // exportDoc(item);
 
       setOperatorState(Operator.EditDoc);
+      setCurDoc(item);
   }
 
   useEffect(() => {
@@ -48,9 +52,9 @@ export default function EditorCtx({ operator, docList }: { operator: Operator, d
   return (
     <div className="title">
 
-      {
+      {/* {
         operatorState === Operator.AllDoc && (
-          docList.map((item: any, index: number) => (
+          doc.map((item, index) => (
               <div key={index} className={styles.docItem} onClick={() => selectedDoc(item)}>
                   <span className={styles.docTitle}>{item.title}</span>
                   <Button variant="ghost" size="icon" className={styles.closeBtn} onClick={() => {
@@ -62,6 +66,16 @@ export default function EditorCtx({ operator, docList }: { operator: Operator, d
               </div>
           ))
         )
+      } */}
+
+      {
+        operatorState === Operator.AllDoc && (
+          <List
+            bordered
+            dataSource={doc}
+            renderItem={item => <List.Item onClick={() => selectedDoc(item)}>{item.title}</List.Item>}
+          />
+        )
       }
 
       {
@@ -69,7 +83,6 @@ export default function EditorCtx({ operator, docList }: { operator: Operator, d
           <EditorCore id={curDoc.id}  content={curDoc.content}/>
         )
       }
-
     </div>
   );
 }
