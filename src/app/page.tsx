@@ -10,6 +10,7 @@ import { DocItem } from "@/app/PageType";
 import SiderBar from "./siderBar";
 import EditorCore from "./editorCore";
 import styles from './page.module.css';
+import EditorCtx from "@/pages/EditorCtx";
 
 const Page = () => {
   const [doc, setDoc] = useState<DocItem[]>([]);
@@ -37,7 +38,8 @@ const Page = () => {
         </Panel>
         <PanelResizeHandle/>
         <Panel>
-          <EditorCore id={curDoc.id}  content={curDoc.content}/>
+          <EditorCtx/>
+          {/* <EditorCore id={curDoc.id}  content={curDoc.content}/> */}
         </Panel>
         <PanelResizeHandle />
         {/* <Panel defaultSize={12} style={{ border: '1px solid red' }}>

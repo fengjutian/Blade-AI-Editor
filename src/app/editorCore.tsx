@@ -29,23 +29,11 @@ export default function EditorCore({ id, content }: { id: string; content: any[]
   }
 
   useEffect(() => {
-    // docRender();
-
     // 使用 setNodes 替换整个文档内容
     if (content.length > 0) {
       editor.tf.setValue(content)
     }
   }, [content]);
-
-  // useEffect(() => {
-  //   // 在组件加载时，尝试从 localStorage 获取之前保存的值
-  //   const savedValue = localStorage.getItem(`nextjs-plate-value-demo-${new Date().toISOString().split('T')[0]}`);
-  //   if (savedValue) {
-  //     const parsedValue = JSON.parse(savedValue);
-  //     editor.children = parsedValue;
-  //     console.log('Loaded saved value:', parsedValue);
-  //   }
-  // }, []);
 
   return (
     <Plate editor={editor}

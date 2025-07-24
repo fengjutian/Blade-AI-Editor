@@ -1,0 +1,6 @@
+@primary: #4caf50;
+
+.title {
+  color: @primary;
+  font-size: 32px;
+}
