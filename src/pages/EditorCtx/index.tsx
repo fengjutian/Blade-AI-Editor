@@ -4,8 +4,6 @@ import './index.module.css';
 import EditorCore from "@/app/editorCore";
 import React, { useEffect, useState } from "react";
 import { DocItem } from "@/app/PageType";
-import { Button } from "@/components/ui/button";
-import styles from './index.module.css';
 import { Operator } from "@/app/scheme";
 import { List } from '@douyinfe/semi-ui';
 
