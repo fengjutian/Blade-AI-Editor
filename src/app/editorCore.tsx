@@ -7,12 +7,9 @@ import { Plate, usePlateEditor } from 'platejs/react';
 import { EditorKit } from '@/components/editor/editor-kit';
 import { Editor, EditorContainer } from '@/components/ui/editor';
 
-import { setNodes } from 'slate';
-
 export default function EditorCore({ id, content }: { id: string; content: any[] }) {
-  const [value, setValue] = React.useState<any[]>([]);
 
-  const initialValue: any = content
+  const initialValue: any[] = content
 
   const editor = usePlateEditor({
     plugins: EditorKit,

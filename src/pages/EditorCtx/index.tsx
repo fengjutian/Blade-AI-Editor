@@ -6,6 +6,12 @@ import React, { useEffect, useState } from "react";
 import { DocItem } from "@/app/PageType";
 import { Operator } from "@/app/scheme";
 import { List } from '@douyinfe/semi-ui';
+// import DGMCtx from '@/pages/DGM/index';
+// // pages/xxx.js
+import dynamic from 'next/dynamic';
+
+const DGMCtx = dynamic(() => import('@/pages/DGM/index'), { ssr: false });
+
 
 export default function EditorCtx({ operator, docList }: { operator: Operator, docList: DocItem[] }) {
   const [curDoc, setCurDoc] = useState<DocItem>({ id: '', title: '', content: [] });
@@ -44,7 +50,9 @@ export default function EditorCtx({ operator, docList }: { operator: Operator, d
   }
 
   useEffect(() => {
+    if (!docList || docList.length === 0) {
       getDocsList();
+    }
   }, [])
 
   return (
@@ -81,6 +89,8 @@ export default function EditorCtx({ operator, docList }: { operator: Operator, d
           <EditorCore id={curDoc.id}  content={curDoc.content}/>
         )
       }
+
+      {/* <DGMCtx /> */}
     </div>
   );
 }

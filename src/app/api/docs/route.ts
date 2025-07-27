@@ -17,7 +17,6 @@ export async function POST(request: Request, res: Response) {
       const [rows] = await pool.query('SELECT * FROM docs_list');
       console.log('接口调用',rows);
       return NextResponse.json({data: rows, msg: "查询文档成功", status: 200 });
-      // res.status(200).json({data: rows, msg: "查询文档成功", status: 200});
     } catch (error) {
       console.log('查询文档失败',error);
       // res.status(500).json({ error: error.message });
@@ -27,3 +26,35 @@ export async function POST(request: Request, res: Response) {
       });
     }
 }
+
+export async function createDoc() {
+  try {
+    const [rows] = await pool.query('SELECT * FROM docs_list');
+    return NextResponse.json({data: rows, msg: "创建文件成功", status: 200 });
+  } catch (error) {
+    console.log('查询文档失败',error);
+    // res.status(500).json({ error: error.message });
+
+    return new Response("创建文档失败", {
+        status: 500,
+    });
+  }
+
+}
+
+export async function editorDoc(request: Request, res: Response) {
+    try {
+    const [rows] = await pool.query('SELECT * FROM docs_list');
+    return NextResponse.json({data: rows, msg: "查询文档成功", status: 200 });
+  } catch (error) {
+    console.log('查询文档失败',error);
+    // res.status(500).json({ error: error.message });
+
+    return new Response("创建文档失败", {
+        status: 500,
+    });
+  }
+}
+
+
+

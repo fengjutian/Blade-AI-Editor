@@ -62,16 +62,24 @@ const SiderBar = (props: SiderBarProps) => {
     const addDoc = () => {
         setDoc([...doc, { title: `新建文档`, id: `doc${doc.length + 1}`,content: [] }]);
         exportDocList([...doc, { title: `新建文档`, id: `doc${doc.length + 1}`,content: []}])
+
+        fetch('/api/doc/createDoc', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }).then(response => response.json())
+        .then(data => {
+            console.log('File created:', data);
+            if(data.status === 200){
+
+            }
+        })
+        .catch(error => {
+         console.error('Error creating file:', error);
+
+        });
     };
-
-    // const selectedDoc = (item: DocItem) => {
-    //     console.log('selected doc', item.content);
-
-    //     item.content = JSON.parse(item?.content);
-
-    //     console.log('item', item);
-    //     exportDoc(item);
-    // }
 
     return (<div className={styles.siderBarWrap}>
 
