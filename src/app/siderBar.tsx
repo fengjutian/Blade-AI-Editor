@@ -106,6 +106,8 @@ const SiderBar = (props: SiderBarProps) => {
 
         <p>日历</p>
 
+
+        <p>设置</p>
     </div>)
 }
 
