@@ -60,24 +60,29 @@ const SiderBar = (props: SiderBarProps) => {
     }, [])
 
     const addDoc = () => {
-        setDoc([...doc, { title: `新建文档`, id: `doc${doc.length + 1}`,content: [] }]);
-        exportDocList([...doc, { title: `新建文档`, id: `doc${doc.length + 1}`,content: []}])
-
-        fetch('/api/doc/createDoc', {
-            method: 'GET',
+        fetch('/api/docs', {
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-        }).then(response => response.json())
+            body: JSON.stringify({
+                title: `新建文档`,
+                content: [],
+                action:'create'
+            }),
+        })
+        .then(response => response.json())
         .then(data => {
             console.log('File created:', data);
             if(data.status === 200){
-
+                // 后端创建成功后再更新前端状态
+                const newDoc = { title: `新建文档`, id: data.id, content: [] };
+                setDoc([...doc, newDoc]);
+                exportDocList([...doc, newDoc]);
             }
         })
         .catch(error => {
-         console.error('Error creating file:', error);
-
+            console.error('Error creating file:', error);
         });
     };
 
