@@ -12,7 +12,7 @@ import AddTips from "@/app/widgets/AddTips/index";
 
 
 const SiderBar = (props: SiderBarProps) => {
-    const { exportDoc, exportDocList } = props;
+    const { exportDoc, exportDocList, openCopilot } = props;
 
     const [doc, setDoc] = useState<DocItem[]>([]);
 
@@ -100,9 +100,9 @@ const SiderBar = (props: SiderBarProps) => {
             新建文档
         </Button>
 
-        <Link href="/conversation" className={styles.navLink}>
-          <p>对话</p>
-        </Link>
+     
+        <p onClick={() => openCopilot(true)}>对话</p>
+
 
         <p>日历</p>
 

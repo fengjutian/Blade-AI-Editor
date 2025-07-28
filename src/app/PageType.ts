@@ -9,4 +9,5 @@ export interface SiderBarProps {
     addItemDoc?: () => void;
     exportDoc: (data: DocItem) => void;
     exportDocList: (data: any) => void;
+    openCopilot: (data: boolean) => void;
 }

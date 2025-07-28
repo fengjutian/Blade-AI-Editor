@@ -10,11 +10,8 @@ import { DocItem } from "@/app/PageType";
 import SiderBar from "./siderBar";
 import EditorCtx from "@/pages/EditorCtx";
 import { Operator } from "@/app/scheme";
-
-// enum Operator {
-//   AllDoc = 'all-doc', // 所有的文档
-//   EditDoc = 'edit-doc', // 编辑文档
-// }
+import { Copilot } from "@/app/ai-chat/assistant-chat/page";
+import { Familjen_Grotesk } from "next/font/google";
 
 const Page = () => {
   const [curDoc, setCurDoc] = useState<DocItem>({ id: '', title: '', content: [] });
@@ -40,12 +37,14 @@ const Page = () => {
     setDocList(data);
   };
 
+    const [copilotOpen, setCopilotOpen] = useState(false);
+
 
   return (
     <>
       <PanelGroup direction="horizontal">
         <Panel defaultSize={12} style={{ width: '160px', maxWidth: '160px' }}>
-          <SiderBar exportDoc={exportDoc}  exportDocList={exportDocList}/>
+          <SiderBar exportDoc={exportDoc}  exportDocList={exportDocList} openCopilot={() => setCopilotOpen(true)} />
         </Panel>
         <PanelResizeHandle/>
         <Panel>
@@ -55,7 +54,10 @@ const Page = () => {
         {/* <Panel defaultSize={12} style={{ border: '1px solid red' }}>
           right1111
         </Panel> */}
+         <Copilot copilotOpen={copilotOpen} setCopilotOpen={() => setCopilotOpen(false)} />
       </PanelGroup>
+
+    
     </>
   )
 }

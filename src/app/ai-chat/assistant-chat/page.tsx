@@ -157,7 +157,7 @@ interface CopilotProps {
   setCopilotOpen: (open: boolean) => void;
 }
 
-const Copilot = (props: CopilotProps) => {
+export const Copilot = (props: CopilotProps) => {
   const { copilotOpen, setCopilotOpen } = props;
   const { styles } = useCopilotStyle();
   const attachmentsRef = useRef<GetRef<typeof Attachments>>(null);
@@ -241,7 +241,6 @@ const Copilot = (props: CopilotProps) => {
     },
   });
 
-  // ==================== Event ====================
   const handleUserSubmit = (val: string) => {
     onRequest({
       stream: true,
@@ -263,7 +262,6 @@ const Copilot = (props: CopilotProps) => {
     setAttachmentsOpen(true);
   };
 
-  // ==================== Nodes ====================
   const chatHeader = (
     <div className={styles.chatHeader}>
       <div className={styles.headerTitle}>✨ AI Copilot</div>
