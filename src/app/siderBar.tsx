@@ -3,6 +3,7 @@ import styles from './siderBar.module.css';
 import { Button } from "@/components/ui/button";
 import { IconGitBranch } from "@tabler/icons-react";
 import React, { useState } from "react";
+import Link from 'next/link';
 import { DocItem, SiderBarProps } from "@/app/PageType";
 import { useEffect } from "react";
 import { Accordion, Avatar  } from "radix-ui";
@@ -99,7 +100,9 @@ const SiderBar = (props: SiderBarProps) => {
             新建文档
         </Button>
 
-        <p>对话</p>
+        <Link href="/conversation" className={styles.navLink}>
+          <p>对话</p>
+        </Link>
 
         <p>日历</p>
 
