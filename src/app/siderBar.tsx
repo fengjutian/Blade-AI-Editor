@@ -9,7 +9,7 @@ import { useEffect } from "react";
 import { Accordion, Avatar  } from "radix-ui";
 import AvatarDemo from "@/app/widgets/AvatarDemo/AvatarDemo";
 import AddTips from "@/app/widgets/AddTips/index";
-
+import { useChatStore } from "@/chat/store/ChatStore";
 
 const SiderBar = (props: SiderBarProps) => {
     const { exportDoc, exportDocList, openCopilot } = props;

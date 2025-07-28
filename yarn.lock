@@ -8856,9 +8856,9 @@ zustand-x@6.1.0:
     react-tracked "^1.7.11"
     use-sync-external-store "1.4.0"
 
-zustand@^5.0.3, zustand@^5.0.5, zustand@>=5.0.2:
+zustand@^5.0.3, zustand@^5.0.5, zustand@^5.0.6, zustand@>=5.0.2:
   version "5.0.6"
-  resolved "https://registry.npmmirror.com/zustand/-/zustand-5.0.6.tgz"
+  resolved "https://registry.npmjs.org/zustand/-/zustand-5.0.6.tgz"
   integrity sha512-ihAqNeUVhe0MAD+X8M5UzqyZ9k3FFZLBTtqo6JLPwV53cbRB/mJwBI0PxcIgqhBBHlEs8G45OTDTMq3gNcLq3A==
 
 zwitch@^2.0.0:

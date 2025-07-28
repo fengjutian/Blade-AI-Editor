@@ -37,8 +37,7 @@ const Page = () => {
     setDocList(data);
   };
 
-    const [copilotOpen, setCopilotOpen] = useState(false);
-
+  const [copilotOpen, setCopilotOpen] = useState(false);
 
   return (
     <>
@@ -51,13 +50,8 @@ const Page = () => {
           <EditorCtx operator={operator} docList={docList}/>
         </Panel>
         <PanelResizeHandle />
-        {/* <Panel defaultSize={12} style={{ border: '1px solid red' }}>
-          right1111
-        </Panel> */}
          <Copilot copilotOpen={copilotOpen} setCopilotOpen={() => setCopilotOpen(false)} />
       </PanelGroup>
-
-    
     </>
   )
 }
