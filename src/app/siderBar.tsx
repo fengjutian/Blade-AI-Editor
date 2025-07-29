@@ -3,13 +3,12 @@ import styles from './siderBar.module.css';
 import { Button } from "@/components/ui/button";
 import { IconGitBranch } from "@tabler/icons-react";
 import React, { useState } from "react";
-// import Link from 'next/link';
 import { DocItem, SiderBarProps } from "@/app/PageType";
 import { useEffect } from "react";
-// import { Accordion, Avatar  } from "radix-ui";
 import AvatarDemo from "@/app/widgets/AvatarDemo/AvatarDemo";
 import AddTips from "@/app/widgets/AddTips/index";
 import { useChatStore } from "@/app/store/chatStore";
+import { CiViewList, CiTrash, CiSettings, CiSearch, CiShare2, CiMicrophoneOn, CiChat1 } from "react-icons/ci";
 
 const SiderBar = (props: SiderBarProps) => {
     const { exportDoc, exportDocList, openCopilot } = props;
@@ -81,7 +80,6 @@ const SiderBar = (props: SiderBarProps) => {
         .then(data => {
             console.log('File created:', data);
             if(data.status === 200){
-                // 后端创建成功后再更新前端状态
                 const newDoc = { title: `新建文档`, id: data.id, content: [] };
                 setDoc([...doc, newDoc]);
                 exportDocList([...doc, newDoc]);
@@ -96,23 +94,28 @@ const SiderBar = (props: SiderBarProps) => {
 
         <AvatarDemo />
 
-        <AddTips/>
-
-        <div>所有文档</div>
+        {/* <AddTips/> */}
 
         <Button variant="outline" size="sm" className={styles.addBtn} onClick={addDoc}>
             <IconGitBranch />
             新建文档
         </Button>
 
-     
-        <p onClick={operatorChatTap}>对话</p>
+        <p className={styles['icon-box-wrap']}><CiSearch />搜索</p>
 
+        <p className={styles['icon-box-wrap']}><CiViewList />所有文档</p>
 
-        <p>日历</p>
+        <p className={styles['icon-box-wrap']}><CiShare2 />知识图谱</p>
 
+        <p className={styles['icon-box-wrap']}><CiMicrophoneOn />语音</p>
 
-        <p>设置</p>
+        <p className={styles['icon-box-wrap']} onClick={operatorChatTap}><CiChat1 />对话</p>
+
+        <p className={styles['icon-box-wrap']}>日历</p>
+
+        <p className={styles['icon-box-wrap']}><CiTrash />删除</p>
+
+        <p className={styles['icon-box-wrap']}><CiSettings />设置</p>
     </div>)
 }
 
