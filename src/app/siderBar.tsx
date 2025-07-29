@@ -3,22 +3,22 @@ import styles from './siderBar.module.css';
 import { Button } from "@/components/ui/button";
 import { IconGitBranch } from "@tabler/icons-react";
 import React, { useState } from "react";
-import Link from 'next/link';
+// import Link from 'next/link';
 import { DocItem, SiderBarProps } from "@/app/PageType";
 import { useEffect } from "react";
-import { Accordion, Avatar  } from "radix-ui";
+// import { Accordion, Avatar  } from "radix-ui";
 import AvatarDemo from "@/app/widgets/AvatarDemo/AvatarDemo";
 import AddTips from "@/app/widgets/AddTips/index";
-import { useChatStore } from "@/chat/store/ChatStore";
+import { useChatStore } from "@/app/store/chatStore";
 
 const SiderBar = (props: SiderBarProps) => {
     const { exportDoc, exportDocList, openCopilot } = props;
-    const { openChatTab } = useChatStore()
+    const { openChatTab, chatTabType } = useChatStore()
 
     const [doc, setDoc] = useState<DocItem[]>([]);
 
     const operatorChatTap = () => {
-        openChatTab(true);
+        openChatTab(!chatTabType);
     }
 
     const getDocsList = () => {

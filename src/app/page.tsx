@@ -11,7 +11,7 @@ import SiderBar from "./siderBar";
 import EditorCtx from "@/pages/EditorCtx";
 import { Operator } from "@/app/scheme";
 import { Copilot } from "@/app/ai-chat/assistant-chat/page";
-import { useChatStore } from "@/chat/store/ChatStore";
+import { useChatStore } from "@/app/store/chatStore";
 
 
 const Page = () => {
@@ -44,8 +44,6 @@ const Page = () => {
   const exportDocList = (data: DocItem[]) => {
     setDocList(data);
   };
-
-
 
   return (
     <>

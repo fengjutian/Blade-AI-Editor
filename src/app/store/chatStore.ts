@@ -1,16 +1,11 @@
-import { create } from 'zustand'
+import { create } from 'zustand';
 
-export const useChatStore = create((set) => ({
+type ChatStore = {
+  chatTabType: boolean;
+  openChatTab: (open: boolean) => void;
+};
+
+export const useChatStore = create<ChatStore>((set) => ({
   chatTabType: false,
-  openChatTab: () => set((state: any) => ({ count: !state.chatTabType })),
+  openChatTab: (open: boolean) => set(() => ({ chatTabType: open })),
 }))
-
-// function Counter() {
-//   const { count, inc } = useStore()
-//   return (
-//     <div>
-//       <span>{count}</span>
-//       <button onClick={inc}>one up</button>
-//     </div>
-//   )
-// }
