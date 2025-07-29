@@ -13,8 +13,13 @@ import { useChatStore } from "@/chat/store/ChatStore";
 
 const SiderBar = (props: SiderBarProps) => {
     const { exportDoc, exportDocList, openCopilot } = props;
+    const { openChatTab } = useChatStore()
 
     const [doc, setDoc] = useState<DocItem[]>([]);
+
+    const operatorChatTap = () => {
+        openChatTab(true);
+    }
 
     const getDocsList = () => {
         fetch('/api/docs', {
@@ -101,7 +106,7 @@ const SiderBar = (props: SiderBarProps) => {
         </Button>
 
      
-        <p onClick={() => openCopilot(true)}>对话</p>
+        <p onClick={operatorChatTap}>对话</p>
 
 
         <p>日历</p>

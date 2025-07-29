@@ -11,14 +11,22 @@ import SiderBar from "./siderBar";
 import EditorCtx from "@/pages/EditorCtx";
 import { Operator } from "@/app/scheme";
 import { Copilot } from "@/app/ai-chat/assistant-chat/page";
-import { Familjen_Grotesk } from "next/font/google";
+import { useChatStore } from "@/chat/store/ChatStore";
+
 
 const Page = () => {
+  const { chatTabType } = useChatStore()
   const [curDoc, setCurDoc] = useState<DocItem>({ id: '', title: '', content: [] });
 
   const [operator, setOperator] = useState<Operator>(Operator.AllDoc);
+  const [copilotOpen, setCopilotOpen] = useState(false);
 
   const [docList, setDocList] = useState<DocItem[]>([]);
+
+  useEffect(() => {
+    console.log('chatTabType:', chatTabType);
+    setCopilotOpen(chatTabType)
+  }, [chatTabType]);
 
   const exportDoc = (data: DocItem) => {
     console.log('export doc', data);
@@ -37,7 +45,7 @@ const Page = () => {
     setDocList(data);
   };
 
-  const [copilotOpen, setCopilotOpen] = useState(false);
+
 
   return (
     <>
