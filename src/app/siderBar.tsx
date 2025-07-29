@@ -113,6 +113,10 @@ const SiderBar = (props: SiderBarProps) => {
 
         <p className={styles['icon-box-wrap']}>日历</p>
 
+        <p className={styles['icon-box-wrap']}>词典</p>
+
+        <p className={styles['icon-box-wrap']}>消息</p>
+
         <p className={styles['icon-box-wrap']}><CiTrash />删除</p>
 
         <p className={styles['icon-box-wrap']}><CiSettings />设置</p>
