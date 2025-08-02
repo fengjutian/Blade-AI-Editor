@@ -10,10 +10,6 @@ const Setting: React.FC<{isOpen: boolean, closeOpen: () => void}> = (props) => {
     setIsModalOpen(isOpen);
   }, [isOpen])
 
-//   const showModal = () => {
-//     setIsModalOpen(true);
-//   };
-
   const handleOk = () => {
     setIsModalOpen(false);
     closeOpen()
@@ -27,7 +23,7 @@ const Setting: React.FC<{isOpen: boolean, closeOpen: () => void}> = (props) => {
   return (
     <>
       <Modal
-        title="Basic Modal"
+        title="设置"
         closable={{ 'aria-label': 'Custom Close Button' }}
         open={isModalOpen}
         onOk={handleOk}

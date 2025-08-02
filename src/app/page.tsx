@@ -48,7 +48,7 @@ const Page = () => {
   return (
     <>
       <PanelGroup direction="horizontal">
-        <Panel defaultSize={12} style={{ width: '160px', maxWidth: '160px' }}>
+        <Panel defaultSize={12} style={{ width: '160px', minWidth: '160px', maxWidth: '160px' }}>
           <SiderBar exportDoc={exportDoc}  exportDocList={exportDocList} openCopilot={() => setCopilotOpen(true)} />
         </Panel>
         <PanelResizeHandle/>

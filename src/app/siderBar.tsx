@@ -11,6 +11,7 @@ import { useChatStore } from "@/app/store/chatStore";
 import { Modal } from 'antd';
 import { CiViewList, CiTrash, CiSettings, CiSearch, CiShare2, CiMicrophoneOn, CiChat1 } from "react-icons/ci";
 import Setting from "@/app/widgets/Setting/index";
+import Search from "@/app/widgets/Search/index";
 
 const SiderBar = (props: SiderBarProps) => {
     const { exportDoc, exportDocList, openCopilot } = props;
@@ -19,6 +20,7 @@ const SiderBar = (props: SiderBarProps) => {
     const [doc, setDoc] = useState<DocItem[]>([]);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
 
     const showModal = () => {
         setIsModalOpen(true);
@@ -99,6 +101,8 @@ const SiderBar = (props: SiderBarProps) => {
 
     return (
       <div className={styles.siderBarWrap}>
+        {/* 搜索 */}
+        <Search isOpen={isSearchModalOpen} closeOpen={() => setIsSearchModalOpen(false)} />
 
         {/* 设置 */}
         <Setting isOpen={isModalOpen} closeOpen={() => setIsModalOpen(false)} />
@@ -115,7 +119,7 @@ const SiderBar = (props: SiderBarProps) => {
                   新建文档
               </Button>
 
-              <p className={styles['icon-box-wrap']}><CiSearch />搜索</p>
+              <p className={styles['icon-box-wrap']} onClick={() => setIsSearchModalOpen(true)}><CiSearch />搜索</p>
 
               <p className={styles['icon-box-wrap']}><CiViewList />所有文档</p>
 
