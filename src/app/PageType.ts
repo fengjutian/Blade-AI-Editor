@@ -1,3 +1,4 @@
+import { Operator } from "@/app/scheme";
 export interface DocItem {
     title: string;
     id: string;
@@ -10,4 +11,5 @@ export interface SiderBarProps {
     exportDoc: (data: DocItem) => void;
     exportDocList: (data: any) => void;
     openCopilot: (data: boolean) => void;
+    setOperator: (data: Operator) => void;
 }

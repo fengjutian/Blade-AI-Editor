@@ -1,5 +1,4 @@
 'use client';
-
 import {
   PanelGroup,
   Panel,
@@ -49,11 +48,14 @@ const Page = () => {
     <>
       <PanelGroup direction="horizontal">
         <Panel defaultSize={12} style={{ width: '160px', minWidth: '160px', maxWidth: '160px' }}>
-          <SiderBar exportDoc={exportDoc}  exportDocList={exportDocList} openCopilot={() => setCopilotOpen(true)} />
+          <SiderBar exportDoc={exportDoc}
+           exportDocList={exportDocList}
+           setOperator={setOperator}
+           openCopilot={() => setCopilotOpen(true)} />
         </Panel>
         <PanelResizeHandle/>
         <Panel>
-          <EditorCtx operator={operator} docList={docList}/>
+          <EditorCtx operator={operator} docList={docList} setOperator={setOperator}/>
         </Panel>
         <PanelResizeHandle />
         <Copilot copilotOpen={copilotOpen} setCopilotOpen={() => setCopilotOpen(false)} />
