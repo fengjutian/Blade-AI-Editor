@@ -102,7 +102,7 @@ const SiderBar = (props: SiderBarProps) => {
     return (
       <div className={styles.siderBarWrap}>
         {/* 搜索 */}
-        <Search isOpen={isSearchModalOpen} closeOpen={() => setIsSearchModalOpen(false)} />
+        <Search isOpen={isSearchModalOpen} onOpenChange={() => setIsSearchModalOpen(false)} />
 
         {/* 设置 */}
         <Setting isOpen={isModalOpen} closeOpen={() => setIsModalOpen(false)} />
