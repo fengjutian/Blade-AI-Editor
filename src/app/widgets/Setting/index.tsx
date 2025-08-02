@@ -1,5 +1,5 @@
 import React, { use, useEffect, useState } from 'react';
-import { Button, Modal } from 'antd';
+import { Modal } from 'antd';
 
 const Setting: React.FC<{isOpen: boolean, closeOpen: () => void}> = (props) => {
 

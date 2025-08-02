@@ -1,56 +1,39 @@
-import React, { use, useEffect, useState } from 'react';
-import { Modal } from 'antd';
-import { Command } from 'cmdk';
+import React, { useEffect } from 'react'
+import { Command } from 'cmdk';  // 添加 Command 组件导入
+import styles from "./styles.module.css";
 
-const Search: React.FC<{ isOpen: boolean, closeOpen: () => void }> = (props) => {
-  const { isOpen, closeOpen } = props;
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
-
+const Search: React.FC<{ isOpen: boolean, onOpenChange: (open: boolean) => void }> = ({ isOpen, onOpenChange }) => {
+  // Toggle the menu when ⌘K is pressed
   useEffect(() => {
-    setIsModalOpen(isOpen);
-  }, [isOpen])
+    const down = (e) => {
+      if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault()
+        onOpenChange(!isOpen)
+      }
+    }
 
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
+    document.addEventListener('keydown', down)
+    return () => document.removeEventListener('keydown', down)
+  }, [isOpen, onOpenChange])
 
   return (
-    <>
-      <Modal
-        title="搜索"
-        closable={{ 'aria-label': 'Custom Close Button' }}
-        open={isModalOpen}
-        onOk={handleOk}
-        onCancel={handleCancel}
-      >
+    <Command.Dialog open={isOpen} onOpenChange={onOpenChange}
+      label="Global Command Menu" className={styles.dialog}>
+      <Command.Input className={styles.input} />
+      <Command.List className={styles.list}>
+        <Command.Empty className={styles.empty}>No results found.</Command.Empty>
 
-      <Command.Dialog open={isModalOpen}>
-        <Command.Input />
-          <Command.List>
-            {loading && <Command.Loading>Hang on…</Command.Loading>}
+        <Command.Group heading="Letters" className={styles.group}>
+          <Command.Item className={styles.item}>a</Command.Item>
+          <Command.Item className={styles.item}>b</Command.Item>
+          <Command.Separator className={styles.separator} />
+          <Command.Item className={styles.item}>c</Command.Item>
+        </Command.Group>
 
-            <Command.Empty>No results found.</Command.Empty>
-
-            <Command.Group heading="Fruits">
-              <Command.Item>Apple</Command.Item>
-              <Command.Item>Orange</Command.Item>
-              <Command.Separator />
-              <Command.Item>Pear</Command.Item>
-              <Command.Item>Blueberry</Command.Item>
-            </Command.Group>
-
-            <Command.Item>Fish</Command.Item>
-          </Command.List>
-        </Command.Dialog>
-
-      </Modal>
-    </>
-  );
-};
+        <Command.Item className={styles.item}>Apple</Command.Item>
+      </Command.List>
+    </Command.Dialog>
+  )
+}
 
 export default Search;
