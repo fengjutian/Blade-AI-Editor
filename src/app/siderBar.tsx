@@ -39,7 +39,6 @@ const SiderBar = (props: SiderBarProps) => {
         });
     };
 
-
     const getFilesList = async () => {
         fetch('/api/files', {
             method: 'GET',
@@ -90,7 +89,10 @@ const SiderBar = (props: SiderBarProps) => {
         });
     };
 
-    return (<div className={styles.siderBarWrap}>
+    return (
+      <div className={styles.siderBarWrap}>
+
+
 
         <AvatarDemo />
 
