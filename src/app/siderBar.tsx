@@ -8,13 +8,21 @@ import { useEffect } from "react";
 import AvatarDemo from "@/app/widgets/AvatarDemo/AvatarDemo";
 import AddTips from "@/app/widgets/AddTips/index";
 import { useChatStore } from "@/app/store/chatStore";
+import { Modal } from 'antd';
 import { CiViewList, CiTrash, CiSettings, CiSearch, CiShare2, CiMicrophoneOn, CiChat1 } from "react-icons/ci";
+import Setting from "@/app/widgets/Setting/index";
 
 const SiderBar = (props: SiderBarProps) => {
     const { exportDoc, exportDocList, openCopilot } = props;
     const { openChatTab, chatTabType } = useChatStore()
 
     const [doc, setDoc] = useState<DocItem[]>([]);
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const showModal = () => {
+        setIsModalOpen(true);
+    };
 
     const operatorChatTap = () => {
         openChatTab(!chatTabType);
@@ -92,36 +100,42 @@ const SiderBar = (props: SiderBarProps) => {
     return (
       <div className={styles.siderBarWrap}>
 
+        {/* 设置 */}
+        <Setting isOpen={isModalOpen} closeOpen={() => setIsModalOpen(false)} />
 
 
         <AvatarDemo />
 
         {/* <AddTips/> */}
 
-        <Button variant="outline" size="sm" className={styles.addBtn} onClick={addDoc}>
-            <IconGitBranch />
-            新建文档
-        </Button>
+        <div className={styles['siderBar-ctx-wrap']}>
+          <div>
+              <Button variant="outline" size="sm" className={styles.addBtn} onClick={addDoc}>
+                  <IconGitBranch />
+                  新建文档
+              </Button>
 
-        <p className={styles['icon-box-wrap']}><CiSearch />搜索</p>
+              <p className={styles['icon-box-wrap']}><CiSearch />搜索</p>
 
-        <p className={styles['icon-box-wrap']}><CiViewList />所有文档</p>
+              <p className={styles['icon-box-wrap']}><CiViewList />所有文档</p>
 
-        <p className={styles['icon-box-wrap']}><CiShare2 />知识图谱</p>
+              <p className={styles['icon-box-wrap']}><CiShare2 />知识图谱</p>
 
-        <p className={styles['icon-box-wrap']}><CiMicrophoneOn />语音</p>
+              <p className={styles['icon-box-wrap']}><CiMicrophoneOn />语音</p>
 
-        <p className={styles['icon-box-wrap']} onClick={operatorChatTap}><CiChat1 />对话</p>
+              <p className={styles['icon-box-wrap']} onClick={operatorChatTap}><CiChat1 />对话</p>
 
-        <p className={styles['icon-box-wrap']}>日历</p>
+              <p className={styles['icon-box-wrap']}>日历</p>
 
-        <p className={styles['icon-box-wrap']}>词典</p>
+              <p className={styles['icon-box-wrap']}>词典</p>
 
-        <p className={styles['icon-box-wrap']}>消息</p>
-
-        <p className={styles['icon-box-wrap']}><CiTrash />删除</p>
-
-        <p className={styles['icon-box-wrap']}><CiSettings />设置</p>
+              <p className={styles['icon-box-wrap']}>消息</p>
+          </div>
+          <div className={styles['siderBar-bottom-wrap']}>
+            <p className={styles['icon-box-wrap']}><CiTrash />删除</p>
+            <p className={styles['icon-box-wrap']} onClick={showModal}><CiSettings />设置</p>
+          </div>
+        </div>
     </div>)
 }
 

@@ -88,10 +88,12 @@ const AGENT_PLACEHOLDER = 'Generating content, please wait...';
 const useCopilotStyle = createStyles(({ token, css }) => {
   return {
     copilotChat: css`
+    border: 1px solid red;
       display: flex;
       flex-direction: column;
       background: ${token.colorBgContainer};
       color: ${token.colorText};
+      height: 100vh;
     `,
     // chatHeader 样式
     chatHeader: css`
@@ -163,8 +165,6 @@ export const Copilot = (props: CopilotProps) => {
   const attachmentsRef = useRef<GetRef<typeof Attachments>>(null);
   const abortController = useRef<AbortController>(null);
 
-  // ==================== State ====================
-
   const [messageHistory, setMessageHistory] = useState<Record<string, any>>({});
 
   const [sessionList, setSessionList] = useState<Conversation[]>(MOCK_SESSION_LIST);
@@ -175,11 +175,6 @@ export const Copilot = (props: CopilotProps) => {
 
   const [inputValue, setInputValue] = useState('');
 
-  /**
-   * 🔔 Please replace the BASE_URL, PATH, MODEL, API_KEY with your own values.
-   */
-
-  // ==================== Runtime ====================
 
   const [agent] = useXAgent<BubbleDataType>({
     baseURL: 'https://api.x.ant.design/api/llm_siliconflow_deepseekr1',
@@ -263,7 +258,7 @@ export const Copilot = (props: CopilotProps) => {
   };
 
   const chatHeader = (
-    <div className={styles.chatHeader}>
+    <div className={styles.chatHeader} >
       <div className={styles.headerTitle}>✨ AI Copilot</div>
       <Space size={0}>
         <Button

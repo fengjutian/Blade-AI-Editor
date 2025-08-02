@@ -56,7 +56,7 @@ const Page = () => {
           <EditorCtx operator={operator} docList={docList}/>
         </Panel>
         <PanelResizeHandle />
-         <Copilot copilotOpen={copilotOpen} setCopilotOpen={() => setCopilotOpen(false)} />
+        <Copilot copilotOpen={copilotOpen} setCopilotOpen={() => setCopilotOpen(false)} />
       </PanelGroup>
     </>
   )
