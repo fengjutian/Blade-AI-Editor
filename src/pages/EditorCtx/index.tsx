@@ -7,11 +7,9 @@ import { DocItem } from "@/app/PageType";
 import { Operator } from "@/app/scheme";
 import { List } from '@douyinfe/semi-ui';
 // import DGMCtx from '@/pages/DGM/index';
-// // pages/xxx.js
-import dynamic from 'next/dynamic';
+// import dynamic from 'next/dynamic';
 
-const DGMCtx = dynamic(() => import('@/pages/DGM/index'), { ssr: false });
-
+// const DGMCtx = dynamic(() => import('@/pages/DGM/index'), { ssr: false });
 
 export default function EditorCtx({ operator, docList }: { operator: Operator, docList: DocItem[] }) {
   const [curDoc, setCurDoc] = useState<DocItem>({ id: '', title: '', content: [] });
@@ -40,12 +38,15 @@ export default function EditorCtx({ operator, docList }: { operator: Operator, d
   const selectedDoc = (item: DocItem) => {
     console.log('selected doc', item.content);
 
-      item.content = Array.isArray(item?.content) ? [] : JSON.parse(item?.content);
+      // item.content = item?.content ? JSON.parse(item?.content) : [];
 
       console.log('item', item);
       // exportDoc(item);
 
       setOperatorState(Operator.EditDoc);
+
+      console.log('item.content', item);
+
       setCurDoc(item);
   }
 
@@ -57,23 +58,6 @@ export default function EditorCtx({ operator, docList }: { operator: Operator, d
 
   return (
     <div className="title">
-
-      {/* {
-        operatorState === Operator.AllDoc && (
-          doc.map((item, index) => (
-              <div key={index} className={styles.docItem} onClick={() => selectedDoc(item)}>
-                  <span className={styles.docTitle}>{item.title}</span>
-                  <Button variant="ghost" size="icon" className={styles.closeBtn} onClick={() => {
-                      const newDoc = doc.filter((_, i) => i !== index);
-                      setDoc(newDoc);
-                  }}>
-                    X
-                  </Button>
-              </div>
-          ))
-        )
-      } */}
-
       {
         operatorState === Operator.AllDoc && (
           <List
@@ -89,8 +73,6 @@ export default function EditorCtx({ operator, docList }: { operator: Operator, d
           <EditorCore id={curDoc.id}  content={curDoc.content}/>
         )
       }
-
-      {/* <DGMCtx /> */}
     </div>
   );
 }

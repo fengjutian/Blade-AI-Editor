@@ -16,8 +16,6 @@ export async function POST(request: Request) {
     try {
       const body = await request.json();
 
-      console.log(11111, typeof body)
-      
       // 保留原有的查询文档接口
       if (body.action === 'query') {
         const [rows] = await pool.query('SELECT * FROM docs_list');
@@ -40,15 +38,14 @@ export async function POST(request: Request) {
         });
       }
 
-      // 新增编辑文档功能
+      // 编辑文档功能
       if (body.action === 'update') {
         const { id, title, content } = body;
         const updatedDoc = await prisma.docs.update({
           where: { id },
           data: {
             title,
-            content: JSON.stringify(content),
-            updatedAt: new Date()
+            content: JSON.stringify(content)
           },
         });
         return NextResponse.json({
@@ -64,6 +61,3 @@ export async function POST(request: Request) {
       });
     }
 }
-
-
-
