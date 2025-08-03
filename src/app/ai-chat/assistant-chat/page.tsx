@@ -159,6 +159,7 @@ interface CopilotProps {
   setCopilotOpen: (open: boolean) => void;
 }
 
+// AI 聊天
 export const Copilot = (props: CopilotProps) => {
   const { copilotOpen, setCopilotOpen } = props;
   const { styles } = useCopilotStyle();
@@ -177,9 +178,11 @@ export const Copilot = (props: CopilotProps) => {
 
 
   const [agent] = useXAgent<BubbleDataType>({
-    baseURL: 'https://api.x.ant.design/api/llm_siliconflow_deepseekr1',
-    model: 'deepseek-ai/DeepSeek-R1',
-    dangerouslyApiKey: 'Bearer sk-xxxxxxxxxxxxxxxxxxxx',
+    baseURL: 'https://api.moonshot.cn/v1',
+    model: 'kimi-k2-0711-preview',
+    dangerouslyApiKey: 'Bearer sk-WRgZdrOMOr2jqyEnFwIMmcVFABza5xbqONDvx880aSe6Z8Lt',
+    // 移除 apiKey 属性，因为该属性不在 XAgentConfig 类型定义中
+    // apiKey: 'sk-WRgZdrOMOr2jqyEnFwIMmcVFABza5xbqONDvx880aSe6Z8Lt',
   });
 
   const loading = agent.isRequesting();
@@ -194,7 +197,7 @@ export const Copilot = (props: CopilotProps) => {
         };
       }
       return {
-        content: 'Request failed, please try again!',
+        content: '请求失败,请再次尝试!',
         role: 'assistant',
       };
     },
@@ -358,7 +361,7 @@ export const Copilot = (props: CopilotProps) => {
         <>
           <Welcome
             variant="borderless"
-            title="👋 Hello, I'm Ant Design X"
+            title="👋 Hello, I'm 一个 AI 助手"
             description="Base on Ant Design, AGI product interface solution, create a better intelligent vision~"
             className={styles.chatWelcome}
           />
