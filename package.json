@@ -3,7 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    // "dev": "next dev --turbopack",
+    "dist": "npm run build && electron-builder",
+    "dev:electron": "wait-on http://localhost:3000 && electron .",
+    "dev": "concurrently \"npm run dev:next\" \"npm run dev:electron\"",
     "build": "next build",
     "lint": "next lint"
   },
