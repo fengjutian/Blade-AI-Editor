@@ -28,3 +28,8 @@ DATABASE_URL="mysql://root:fengjutian@localhost:3306/docs"
 
 
 npx prisma migrate dev --name init
+
+
+## prisma 数据库迁移
+
+npx prisma generate

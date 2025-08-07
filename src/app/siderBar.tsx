@@ -12,6 +12,7 @@ import { Modal } from 'antd';
 import { CiViewList, CiTrash, CiSettings, CiSearch, CiShare2, CiMicrophoneOn, CiChat1 } from "react-icons/ci";
 import Setting from "@/app/widgets/Setting/index";
 import Search from "@/app/widgets/Search/index";
+import LLMConfig from "@/app/widgets/LLM";
 import { Operator } from "@/app/scheme";
 
 const SiderBar = (props: SiderBarProps) => {
@@ -108,6 +109,8 @@ const SiderBar = (props: SiderBarProps) => {
 
       <AvatarDemo />
 
+      <LLMConfig />
+
       {/* <AddTips/> */}
 
       <div className={styles['siderBar-ctx-wrap']}>
@@ -125,12 +128,17 @@ const SiderBar = (props: SiderBarProps) => {
           <p className={styles['icon-box-wrap']}>日历</p>
           <p className={styles['icon-box-wrap']}>词典</p>
           <p className={styles['icon-box-wrap']}>消息</p>
+          <p className={styles['icon-box-wrap']}>大模型</p>
+          <p className={styles['icon-box-wrap']}>数据库图形化设计</p>
         </div>
         <div className={styles['siderBar-bottom-wrap']}>
           <p className={styles['icon-box-wrap']}><CiTrash />删除</p>
           <p className={styles['icon-box-wrap']} onClick={showModal}><CiSettings />设置</p>
         </div>
       </div>
+
+
+
   </div>)
 }
 
