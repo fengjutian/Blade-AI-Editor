@@ -13,7 +13,7 @@ export default function LLMConfig() {
 
   return (
     <>
-      <Button onPress={onOpen}>打开弹层</Button>
+      {/* <Button onPress={onOpen}>打开弹层</Button> */}
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
           {(onClose: any) => (

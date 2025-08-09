@@ -131,14 +131,14 @@ const SiderBar = (props: SiderBarProps) => {
           <p className={styles['icon-box-wrap']} onClick={() => setIsSearchModalOpen(true)}><CiSearch />搜索</p>
           <p className={styles['icon-box-wrap']}
             onClick={updataDoc}><CiViewList />所有文档</p>
-          <p className={styles['icon-box-wrap']}><CiShare2 />知识图谱</p>
-          <p className={styles['icon-box-wrap']}><CiMicrophoneOn />语音</p>
+          {/* <p className={styles['icon-box-wrap']}><CiShare2 />知识图谱</p>
+          <p className={styles['icon-box-wrap']}><CiMicrophoneOn />语音</p> */}
           <p className={styles['icon-box-wrap']} onClick={operatorChatTap}><CiChat1 />对话</p>
-          <p className={styles['icon-box-wrap']}>日历</p>
+          {/* <p className={styles['icon-box-wrap']}>日历</p>
           <p className={styles['icon-box-wrap']}>词典</p>
           <p className={styles['icon-box-wrap']}>消息</p>
           <p className={styles['icon-box-wrap']}>大模型</p>
-          <p className={styles['icon-box-wrap']}>数据库图形化设计</p>
+          <p className={styles['icon-box-wrap']}>数据库图形化设计</p> */}
         </div>
         <div className={styles['siderBar-bottom-wrap']}>
           <p className={styles['icon-box-wrap']}><CiTrash />删除</p>
