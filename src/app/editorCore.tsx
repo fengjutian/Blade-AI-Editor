@@ -17,7 +17,7 @@ export default function EditorCore({ id, content, title }: { id: string; content
   });
 
   useEffect(() => {
-    const parseContent = JSON.parse(content)
+    const parseContent: any = JSON.parse(content)
     console.log('parseContent', content, parseContent)
     if (parseContent.length > 0) {
       const parseValueCtx = JSON.parse(parseContent)
