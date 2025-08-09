@@ -6,7 +6,6 @@ import React, { useState } from "react";
 import { DocItem, SiderBarProps } from "@/app/PageType";
 import { useEffect } from "react";
 import AvatarDemo from "@/app/widgets/AvatarDemo/AvatarDemo";
-// import AddTips from "@/app/widgets/AddTips/index";
 import { useChatStore } from "@/app/store/chatStore";
 import { CiViewList, CiTrash, CiSettings, CiSearch, CiShare2, CiMicrophoneOn, CiChat1 } from "react-icons/ci";
 import Setting from "@/app/widgets/Setting/index";
@@ -14,6 +13,7 @@ import Search from "@/app/widgets/Search/index";
 import LLMConfig from "@/app/widgets/LLM";
 import { Operator } from "@/app/scheme";
 import { Notification } from '@douyinfe/semi-ui';
+import Calendar from '@douyinfe/semi-ui';
 
 const SiderBar = (props: SiderBarProps) => {
   const { exportDocList, setOperator } = props;
@@ -23,6 +23,7 @@ const SiderBar = (props: SiderBarProps) => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
+  const [isCalendar, setIsCalendar] = useState(false);
 
   const showModal = () => {
       setIsModalOpen(true);
@@ -134,8 +135,8 @@ const SiderBar = (props: SiderBarProps) => {
           {/* <p className={styles['icon-box-wrap']}><CiShare2 />知识图谱</p>
           <p className={styles['icon-box-wrap']}><CiMicrophoneOn />语音</p> */}
           <p className={styles['icon-box-wrap']} onClick={operatorChatTap}><CiChat1 />对话</p>
-          {/* <p className={styles['icon-box-wrap']}>日历</p>
-          <p className={styles['icon-box-wrap']}>词典</p>
+          <p className={styles['icon-box-wrap']} onClick={() => setIsCalendar(true)}>日历</p>
+          {/* <p className={styles['icon-box-wrap']}>词典</p>
           <p className={styles['icon-box-wrap']}>消息</p>
           <p className={styles['icon-box-wrap']}>大模型</p>
           <p className={styles['icon-box-wrap']}>数据库图形化设计</p> */}

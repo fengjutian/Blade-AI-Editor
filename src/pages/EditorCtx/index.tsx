@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import { DocItem } from "@/app/PageType";
 import { Operator } from "@/app/scheme";
 import { List, Avatar, ButtonGroup, Button } from '@douyinfe/semi-ui';
+import CalendarEle from "@/app/widgets/calendar";
 
 export default function EditorCtx({ operator, docList, setOperator }: { operator: Operator, docList: DocItem[], setOperator: (operator: Operator) => void }) {
   const [curDoc, setCurDoc] = useState<DocItem>({ id: '', title: '', content: [] });
@@ -52,6 +53,8 @@ export default function EditorCtx({ operator, docList, setOperator }: { operator
 
   return (
     <div className="title">
+
+      {/* 所有文档 */}
       {
         operatorState === Operator.AllDoc && (
           <List
@@ -79,6 +82,15 @@ export default function EditorCtx({ operator, docList, setOperator }: { operator
           />
         )
       }
+
+      {/* 日历 */}
+      {
+        operatorState === Operator.Calendar && (
+          <CalendarEle />
+        )
+      }
+
+      {/* 编辑 */}
       {
         operatorState === Operator.EditDoc && (
           <EditorCore id={curDoc.id} title={curDoc.title} content={curDoc.content}/>
