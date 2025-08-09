@@ -18,8 +18,9 @@ export default function EditorCore({ id, content, title }: { id: string; content
 
   useEffect(() => {
     const parseContent = JSON.parse(content)
-    const parseValueCtx = JSON.parse(parseContent)
-    if (parseValueCtx.length > 0) {
+    console.log('parseContent', content, parseContent)
+    if (parseContent.length > 0) {
+      const parseValueCtx = JSON.parse(parseContent)
       editor.tf.setValue(parseValueCtx)
     }
   }, [content, editor.tf]);

@@ -91,11 +91,11 @@ const SiderBar = (props: SiderBarProps) => {
         setDoc([...doc, newDoc]);
         exportDocList([...doc, newDoc]);
 
-         Notification.open({
-                title: '提示',
-                content: data.msg,
-                duration: 3,
-            })
+        Notification.open({
+          title: '提示',
+          content: data.msg,
+          duration: 3,
+        })
       }
     })
     .catch(error => {
