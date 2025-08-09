@@ -31,6 +31,8 @@ export async function POST(request: Request) {
             content: JSON.stringify(content),
           },
         });
+
+        console.log(123456, newDoc)
         return NextResponse.json({
           data: newDoc,
           msg: "文档创建成功",

@@ -9,7 +9,7 @@ import { List, Avatar, ButtonGroup, Button } from '@douyinfe/semi-ui';
 
 export default function EditorCtx({ operator, docList, setOperator }: { operator: Operator, docList: DocItem[], setOperator: (operator: Operator) => void }) {
   const [curDoc, setCurDoc] = useState<DocItem>({ id: '', title: '', content: [] });
-  const [doc, setDoc] = useState<DocItem[]>(docList); // initialize from props
+  const [doc, setDoc] = useState<DocItem[]>(docList);
   const [operatorState, setOperatorState] = useState<Operator>(operator);
 
   useEffect(() => {
@@ -20,11 +20,10 @@ export default function EditorCtx({ operator, docList, setOperator }: { operator
     fetch('/api/docs', {
       method: 'GET',
       headers: {
-          'Content-Type': 'application/json',
+        'Content-Type': 'application/json',
       },
     }).then(response => response.json())
     .then(data => {
-      console.log('123:', data);
       setDoc(data);
     })
     .catch(error => {
@@ -39,6 +38,11 @@ export default function EditorCtx({ operator, docList, setOperator }: { operator
     console.log('item.content', item);
     setCurDoc(item);
   }
+
+  useEffect(() => {
+    console.log('docList changed:', docList);
+  }, [setOperator]);
+
 
   useEffect(() => {
     if (!docList || docList.length === 0) {

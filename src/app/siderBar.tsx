@@ -6,17 +6,17 @@ import React, { useState } from "react";
 import { DocItem, SiderBarProps } from "@/app/PageType";
 import { useEffect } from "react";
 import AvatarDemo from "@/app/widgets/AvatarDemo/AvatarDemo";
-import AddTips from "@/app/widgets/AddTips/index";
+// import AddTips from "@/app/widgets/AddTips/index";
 import { useChatStore } from "@/app/store/chatStore";
-import { Modal } from 'antd';
 import { CiViewList, CiTrash, CiSettings, CiSearch, CiShare2, CiMicrophoneOn, CiChat1 } from "react-icons/ci";
 import Setting from "@/app/widgets/Setting/index";
 import Search from "@/app/widgets/Search/index";
 import LLMConfig from "@/app/widgets/LLM";
 import { Operator } from "@/app/scheme";
+import { Notification } from '@douyinfe/semi-ui';
 
 const SiderBar = (props: SiderBarProps) => {
-  const { exportDoc, exportDocList, openCopilot, setOperator } = props;
+  const { exportDocList, setOperator } = props;
   const { openChatTab, chatTabType } = useChatStore()
 
   const [doc, setDoc] = useState<DocItem[]>([]);
@@ -36,12 +36,10 @@ const SiderBar = (props: SiderBarProps) => {
     fetch('/api/docs', {
       method: 'GET',
       headers: {
-          'Content-Type': 'application/json',
+        'Content-Type': 'application/json',
       },
     }).then(response => response.json())
     .then(data => {
-      console.log('123:', data);
-
       setDoc(data);
       exportDocList(data)
     })
@@ -80,7 +78,7 @@ const SiderBar = (props: SiderBarProps) => {
           'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-          title: `新建文档`,
+          title: `新建文档` +Math.random(),
           content: [],
           action:'create'
       }),
@@ -89,15 +87,26 @@ const SiderBar = (props: SiderBarProps) => {
     .then(data => {
       console.log('File created:', data);
       if(data.status === 200){
-        const newDoc = { title: `新建文档`, id: data.id, content: [] };
+        const newDoc = data.data;
         setDoc([...doc, newDoc]);
         exportDocList([...doc, newDoc]);
+
+         Notification.open({
+                title: '提示',
+                content: data.msg,
+                duration: 3,
+            })
       }
     })
     .catch(error => {
       console.error('Error creating file:', error);
     });
   };
+
+  const updataDoc = () => {
+    setOperator(Operator.AllDoc)
+    getDocsList()
+  }
 
   return (
     <div className={styles.siderBarWrap}>
@@ -121,7 +130,7 @@ const SiderBar = (props: SiderBarProps) => {
           </Button>
           <p className={styles['icon-box-wrap']} onClick={() => setIsSearchModalOpen(true)}><CiSearch />搜索</p>
           <p className={styles['icon-box-wrap']}
-            onClick={() => setOperator(Operator.AllDoc)}><CiViewList />所有文档</p>
+            onClick={updataDoc}><CiViewList />所有文档</p>
           <p className={styles['icon-box-wrap']}><CiShare2 />知识图谱</p>
           <p className={styles['icon-box-wrap']}><CiMicrophoneOn />语音</p>
           <p className={styles['icon-box-wrap']} onClick={operatorChatTap}><CiChat1 />对话</p>

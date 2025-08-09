@@ -28,7 +28,6 @@ const Page = () => {
   }, [chatTabType]);
 
   const exportDoc = (data: DocItem) => {
-    console.log('export doc', data);
     setCurDoc(data);
   };
 
