@@ -1,12 +1,11 @@
 'use client';
-
 import * as React from 'react';
 import { useEffect } from 'react';
 import { Plate, usePlateEditor } from 'platejs/react';
 import { EditorKit } from '@/components/editor/editor-kit';
 import { Editor, EditorContainer } from '@/components/ui/editor';
 
-export default function EditorCore({ id, content }: { id: string; content: any[] }) {
+export default function EditorCore({ id, content, title }: { id: string; content: any[]; title: string }) {
 
   const initialValue: any[] = content ?? []
 
@@ -18,25 +17,22 @@ export default function EditorCore({ id, content }: { id: string; content: any[]
   });
 
   useEffect(() => {
-    // console.log('content----', content, typeof content, JSON.parse(content));
     const parseContent = JSON.parse(content)
     const parseValueCtx = JSON.parse(parseContent)
-    // console.log('parseContent', JSON.parse(parseContent), typeof JSON.parse(parseContent));
     if (parseValueCtx.length > 0) {
       editor.tf.setValue(parseValueCtx)
     }
   }, [content, editor.tf]);
 
   const uploadText = (data: any) => {
-    console.log('uploadText', data);
     fetch('/api/docs', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        id: 1,
-        title: `新建文档1`,
+        id: id,
+        title: title,
         content: JSON.stringify(data),
         action:'update'
       }),

@@ -2,10 +2,10 @@
 
 import './index.module.css';
 import EditorCore from "@/app/editorCore";
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DocItem } from "@/app/PageType";
 import { Operator } from "@/app/scheme";
-import { List } from '@douyinfe/semi-ui';
+import { List, Avatar, ButtonGroup, Button } from '@douyinfe/semi-ui';
 
 export default function EditorCtx({ operator, docList, setOperator }: { operator: Operator, docList: DocItem[], setOperator: (operator: Operator) => void }) {
   const [curDoc, setCurDoc] = useState<DocItem>({ id: '', title: '', content: [] });
@@ -13,7 +13,6 @@ export default function EditorCtx({ operator, docList, setOperator }: { operator
   const [operatorState, setOperatorState] = useState<Operator>(operator);
 
   useEffect(() => {
-    console.log('operator1111111111111', operator);
     setOperatorState(operator);
   }, [operator])
 
@@ -33,7 +32,8 @@ export default function EditorCtx({ operator, docList, setOperator }: { operator
     });
   };
 
-  const selectedDoc = (item: DocItem) => {
+  const selectedDoc = (e: any, item: DocItem) => {
+    e.preventDefault();
     setOperatorState(Operator.EditDoc);
     setOperator(Operator.EditDoc);
     console.log('item.content', item);
@@ -53,14 +53,31 @@ export default function EditorCtx({ operator, docList, setOperator }: { operator
           <List
             bordered
             dataSource={doc}
-            renderItem={item => <List.Item onClick={() => selectedDoc(item)}>{item.title}</List.Item>}
+            renderItem={item =>
+            <List.Item
+              key={item.id}
+              header={<Avatar color="blue">Doc</Avatar>}
+              main={
+                <div>
+                  {item.title}
+                </div>
+              }
+              extra={
+                <ButtonGroup theme="borderless">
+                  <Button>编辑</Button>
+                  <Button>删除</Button>
+                  <Button>更多</Button>
+                </ButtonGroup>
+              }
+              onClick={(e) => selectedDoc(e, item)}>
+            </List.Item>
+          }
           />
         )
       }
-
       {
         operatorState === Operator.EditDoc && (
-          <EditorCore id={curDoc.id}  content={curDoc.content}/>
+          <EditorCore id={curDoc.id} title={curDoc.title} content={curDoc.content}/>
         )
       }
     </div>

@@ -88,7 +88,6 @@ const AGENT_PLACEHOLDER = 'Generating content, please wait...';
 const useCopilotStyle = createStyles(({ token, css }) => {
   return {
     copilotChat: css`
-    border: 1px solid red;
       display: flex;
       flex-direction: column;
       background: ${token.colorBgContainer};
