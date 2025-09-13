@@ -1,9 +1,9 @@
-import { NextResponse } from 'next/server'; // 添加NextResponse导入
+import { NextRequest, NextResponse } from 'next/server';
 import pool from '../../db';
-import { prisma } from '../../db'; // 从db.ts导入prisma
-import { logger, Logger } from '@/utils/logger'; // 修改导入，同时导入Logger类
+import { prisma } from '../../db';
+import { logger, Logger } from '@/utils/logger'; // 同时导入Logger类
 
-// 为API路由创建专用的日志实例 - 修复这里
+// 使用Logger类创建实例
 const apiLogger = Logger.getInstance({ prefix: 'API_DOCS' });
 
 export async function GET() {
@@ -140,35 +140,41 @@ export async function POST(request: Request) {
 }
 
 // 修复 DELETE 方法
-// 在Next.js App Router中，动态路由应该在单独的[id]目录下
-// 但由于这是在route.ts中，我们需要使用动态路由参数
+// 在Next.js App Router中，我们需要使用Params来获取路由参数
+// 在Next.js App Router中，我们需要使用Params来获取路由参数
+// 删除这行重复的导入语句
+// import { NextRequest, NextResponse } from 'next/server'; // 删除这行
 
-export async function DELETE(request: Request) {
+// 保留下面的DELETE方法实现，但修改参数类型
+// 如果已经在文件顶部导入了NextRequest和NextResponse，这里不需要再导入
+
+// 修改DELETE方法以正确处理路由参数
+export async function DELETE(request: Request) { // 修改参数类型为Request
   const startTime = Date.now();
   try {
-    // 从URL中提取ID
+    // 从URL中提取ID - 使用更可靠的方式
     const url = new URL(request.url);
-    // 获取URL路径段，找到最后一个有效段作为ID
-    const pathSegments = url.pathname.split('/').filter(segment => segment !== '');
-    // 找到'docs'后面的ID段
-    const docsIndex = pathSegments.indexOf('docs');
+    const pathname = url.pathname;
     
-    if (docsIndex === -1 || docsIndex === pathSegments.length - 1) {
+    // 提取URL中的ID（支持/api/docs/18格式）
+    const match = pathname.match(/\/api\/docs\/(\d+)/);
+    
+    if (!match) {
       const duration = Date.now() - startTime;
-      apiLogger.warn('DELETE请求缺少文档ID');
-      apiLogger.logApiRequest('DELETE', url.pathname, 400, duration);
+      apiLogger.warn('DELETE请求URL格式不正确');
+      apiLogger.logApiRequest('DELETE', pathname, 400, duration);
       return NextResponse.json({
-        msg: "缺少文档ID",
+        msg: "URL格式不正确，应为/api/docs/{id}",
         status: 400
       }, { status: 400 });
     }
     
-    const id = pathSegments[docsIndex + 1];
+    const id = match[1];
     
     if (!id || isNaN(Number(id))) {
       const duration = Date.now() - startTime;
       apiLogger.warn(`DELETE请求无效的文档ID: ${id}`);
-      apiLogger.logApiRequest('DELETE', url.pathname, 400, duration);
+      apiLogger.logApiRequest('DELETE', pathname, 400, duration);
       return NextResponse.json({
         msg: "无效的文档ID",
         status: 400
@@ -183,7 +189,7 @@ export async function DELETE(request: Request) {
     if (!doc) {
       const duration = Date.now() - startTime;
       apiLogger.warn(`DELETE请求文档不存在: ID=${numericId}`);
-      apiLogger.logApiRequest('DELETE', url.pathname, 404, duration);
+      apiLogger.logApiRequest('DELETE', pathname, 404, duration);
       return NextResponse.json({
         msg: "文档不存在",
         status: 404
@@ -195,7 +201,7 @@ export async function DELETE(request: Request) {
     
     const duration = Date.now() - startTime;
     apiLogger.info(`删除文档成功: ID=${numericId}, 标题="${doc.title}"`);
-    apiLogger.logApiRequest('DELETE', url.pathname, 200, duration);
+    apiLogger.logApiRequest('DELETE', pathname, 200, duration);
     
     return NextResponse.json({
       msg: "文档删除成功",
@@ -203,8 +209,9 @@ export async function DELETE(request: Request) {
     }, { status: 200 });
   } catch (error) {
     const duration = Date.now() - startTime;
+    const pathname = new URL(request.url).pathname;
     apiLogger.error('删除文档失败', error as Error);
-    apiLogger.logApiRequest('DELETE', new URL(request.url).pathname, 500, duration);
+    apiLogger.logApiRequest('DELETE', pathname, 500, duration);
     return NextResponse.json({
       msg: "删除文档失败",
       status: 500
