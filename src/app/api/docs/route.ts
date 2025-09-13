@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import pool from '../../db';
+// 只保留一种数据库访问方式
 import { prisma } from '../../db';
-import { logger, Logger } from '@/utils/logger'; // 同时导入Logger类
+// 移除 mysql2 连接池的导入
+// import pool from '../../db';
+import { logger, Logger } from '@/utils/logger';
 
 // 使用Logger类创建实例
 const apiLogger = Logger.getInstance({ prefix: 'API_DOCS' });
@@ -27,11 +29,14 @@ export async function POST(request: Request) {
     const body = await request.json();
 
     // 保留原有的查询文档接口
+    // 删除对 mysql2 连接池的使用
+    // 修改 query action 部分
     if (body.action === 'query') {
-      const [rows] = await pool.query('SELECT * FROM docs_list');
-      const duration = Date.now() - startTime;
-      apiLogger.logApiRequest('POST', '/api/docs?action=query', 200, duration);
-      return NextResponse.json({data: rows, msg: "查询文档成功", status: 200 });
+    // 使用 Prisma 替代 mysql2 连接池
+    const rows = await prisma.docs.findMany();
+    const duration = Date.now() - startTime;
+    apiLogger.logApiRequest('POST', '/api/docs?action=query', 200, duration);
+    return NextResponse.json({data: rows, msg: "查询文档成功", status: 200 });
     }
     
     // 新的创建文档功能
