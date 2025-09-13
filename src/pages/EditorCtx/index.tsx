@@ -36,19 +36,21 @@ export default function EditorCtx({ operator, docList, setOperator }: { operator
   const deleteDoc = (e: any, id: string) => {
     e.stopPropagation(); // 阻止事件冒泡，避免触发文档选择
     
-    if (window.confirm('确定要删除这个文档吗？此操作无法撤销。')) {
+    // 使用 useMounted 钩子或条件检查确保在客户端执行
+    if (typeof window !== 'undefined' && window.confirm('确定要删除这个文档吗？此操作无法撤销。')) {
       fetch(`/api/docs/${id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
         },
       })
-      .then(response => {
-        if (response.ok) {
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === 200) {
           // 删除成功后更新文档列表
           getDocsList();
         } else {
-          throw new Error('删除文档失败');
+          alert(data.msg || '删除文档失败');
         }
       })
       .catch(error => {
