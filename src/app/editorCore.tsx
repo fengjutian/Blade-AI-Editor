@@ -35,7 +35,7 @@ export default function EditorCore({ id, content, title }: { id: string; content
     };
   }, [id]);
 
-  // 创建编辑器配置，使用withYjs包装
+  // 创建编辑器配置
   const editorConfig = useMemo(() => {
     if (!yDoc || !collaborationManager) {
       return {
@@ -47,8 +47,8 @@ export default function EditorCore({ id, content, title }: { id: string; content
     return {
       plugins: [...EditorKit],
       value: () => Array.isArray(initialValue) ? initialValue : [],
-      // 使用withYjs包装编辑器配置
-      editor: withYjs({
+      // 使用正确的API名称
+      editor: withTYjs({
         yDoc,
         // 可以在这里添加其他Yjs相关配置
       })

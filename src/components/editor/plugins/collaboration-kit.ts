@@ -1,7 +1,7 @@
 import * as Y from 'yjs';
 import { WebsocketProvider } from 'y-websocket';
-// 使用正确的API导入
-import { withYjs } from '@platejs/yjs';
+// 修复API导入名称
+import { withTYjs } from '@platejs/yjs';
 import { v4 as uuidv4 } from 'uuid';
 
 // 生成唯一用户ID
@@ -45,5 +45,5 @@ export const createCollaborationManager = (documentId: string) => {
   };
 };
 
-// 导出withYjs函数供其他地方使用
-export { withYjs };
+// 重命名导出，保持接口兼容性
+export { withTYjs as withYjs };
