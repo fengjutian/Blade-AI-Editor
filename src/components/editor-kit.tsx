@@ -3,6 +3,9 @@
 import { type Value, TrailingBlockPlugin } from 'platejs';
 import { type TPlateEditor, useEditorRef } from 'platejs/react';
 
+// 移除对不存在的collaborationPlugin的导入
+// import collaborationPlugin from '@/components/editor/plugins/collaboration-kit';
+
 import { AIKit } from '@/components/editor/plugins/ai-kit';
 import { AlignKit } from '@/components/editor/plugins/align-kit';
 import { AutoformatKit } from '@/components/editor/plugins/autoformat-kit';
@@ -38,7 +41,9 @@ import { TableKit } from '@/components/editor/plugins/table-kit';
 import { TocKit } from '@/components/editor/plugins/toc-kit';
 import { ToggleKit } from '@/components/editor/plugins/toggle-kit';
 
-export const EditorKit = [
+// 合并所有插件
+// 注意：协同功能现在通过withYjs在editorCore中应用，不再需要这里添加
+const EditorKit = [
   ...CopilotKit,
   ...AIKit,
 
@@ -88,8 +93,11 @@ export const EditorKit = [
   ...BlockPlaceholderKit,
   ...FixedToolbarKit,
   ...FloatingToolbarKit,
+  // 移除不存在的collaborationPlugin
 ];
 
 export type MyEditor = TPlateEditor<Value, (typeof EditorKit)[number]>;
 
 export const useEditor = () => useEditorRef<MyEditor>();
+
+export { EditorKit };
