@@ -32,6 +32,32 @@ export default function EditorCtx({ operator, docList, setOperator }: { operator
     });
   };
 
+  // 添加删除文档函数
+  const deleteDoc = (e: any, id: string) => {
+    e.stopPropagation(); // 阻止事件冒泡，避免触发文档选择
+    
+    if (window.confirm('确定要删除这个文档吗？此操作无法撤销。')) {
+      fetch(`/api/docs/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .then(response => {
+        if (response.ok) {
+          // 删除成功后更新文档列表
+          getDocsList();
+        } else {
+          throw new Error('删除文档失败');
+        }
+      })
+      .catch(error => {
+        console.error('Error deleting file:', error);
+        alert('删除文档失败，请重试');
+      });
+    }
+  };
+
   const selectedDoc = (e: any, item: DocItem) => {
     e.preventDefault();
     setOperatorState(Operator.EditDoc);
@@ -72,7 +98,7 @@ export default function EditorCtx({ operator, docList, setOperator }: { operator
               extra={
                 <ButtonGroup theme="borderless">
                   <Button>编辑</Button>
-                  <Button>删除</Button>
+                  <Button danger onClick={(e) => deleteDoc(e, item.id)}>删除</Button>
                   <Button>更多</Button>
                 </ButtonGroup>
               }
