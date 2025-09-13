@@ -7,6 +7,7 @@ import { DocItem } from "@/app/PageType";
 import { Operator } from "@/app/scheme";
 import { List, Avatar, ButtonGroup, Button } from '@douyinfe/semi-ui';
 import CalendarEle from "@/app/widgets/calendar";
+import { logger, Logger } from '@/utils/logger'; // 修改导入，同时导入Logger类
 
 export default function EditorCtx({ operator, docList, setOperator }: { operator: Operator, docList: DocItem[], setOperator: (operator: Operator) => void }) {
   const [curDoc, setCurDoc] = useState<DocItem>({ id: '', title: '', content: [] });
@@ -33,33 +34,47 @@ export default function EditorCtx({ operator, docList, setOperator }: { operator
   };
 
   // 添加删除文档函数
-  const deleteDoc = (e: any, id: string) => {
-    e.stopPropagation(); // 阻止事件冒泡，避免触发文档选择
+  // 为编辑器组件创建专用的日志实例 - 修复这里
+  const editorLogger = Logger.getInstance({ prefix: 'EDITOR_CTX' });
+  
+  // 在组件中修改删除文档函数
+  const deleteDoc = async (e: React.MouseEvent, id: string) => {
+    e.stopPropagation();
     
-    // 使用 useMounted 钩子或条件检查确保在客户端执行
-    if (typeof window !== 'undefined' && window.confirm('确定要删除这个文档吗？此操作无法撤销。')) {
-      fetch(`/api/docs/${id}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.status === 200) {
-          // 删除成功后更新文档列表
-          getDocsList();
-        } else {
-          alert(data.msg || '删除文档失败');
+    // 检查是否在客户端环境
+    if (typeof window !== 'undefined') {
+      if (confirm('确定要删除这个文档吗？')) {
+        editorLogger.info(`用户尝试删除文档: ID=${id}`);
+        try {
+          const response = await fetch(`/api/docs/${id}`, {
+            method: 'DELETE',
+          });
+          
+          if (response.ok) {
+            await getDocsList();
+            editorLogger.info(`文档删除成功: ID=${id}`);
+            // 可以添加成功提示
+            if (typeof window !== 'undefined') {
+              alert('文档删除成功');
+            }
+          } else {
+            const errorData = await response.json();
+            editorLogger.error(`文档删除失败: ID=${id}, 状态码=${response.status}, 错误=${errorData?.msg || '未知错误'}`);
+            // 添加错误提示
+            if (typeof window !== 'undefined') {
+              alert(`删除失败: ${errorData?.msg || '未知错误'}`);
+            }
+          }
+        } catch (error) {
+          editorLogger.error(`文档删除请求异常: ID=${id}`, error as Error);
+          // 添加异常提示
+          if (typeof window !== 'undefined') {
+            alert('网络请求异常，请稍后重试');
+          }
         }
-      })
-      .catch(error => {
-        console.error('Error deleting file:', error);
-        alert('删除文档失败，请重试');
-      });
+      }
     }
   };
-
   const selectedDoc = (e: any, item: DocItem) => {
     e.preventDefault();
     setOperatorState(Operator.EditDoc);

@@ -1,5 +1,6 @@
 import mysql from 'mysql2/promise';
- 
+import { PrismaClient } from '@prisma/client';
+
 // 创建数据库连接池以提高性能
 const pool = mysql.createPool({
   host: process.env.MYSQL_HOST,
@@ -10,5 +11,8 @@ const pool = mysql.createPool({
   connectionLimit: 10,
   queueLimit: 0,
 });
- 
+
+// 创建Prisma客户端实例
+export const prisma = new PrismaClient();
+
 export default pool;
