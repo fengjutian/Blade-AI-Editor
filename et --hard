@@ -1,0 +1,663 @@
+[33mcommit 31c46778ff1379c0cd848ddc66fd910da3a3df7d[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;32mbackup-current[m[33m)[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Sun Sep 14 20:11:50 2025 +0800
+
+    refactor(样式): 移除CSS变量直接使用颜色值并更新EditorContainer属性
+    
+    将CSS中的@primary变量替换为直接的颜色值#4caf50，提高可维护性
+    更新EditorContainer的variant属性为"default"以符合组件设计规范
+
+[33mcommit ff4b45da26bf80b9ddb18c3e2bd40b4099fc193b[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Sun Sep 14 20:07:08 2025 +0800
+
+    refactor(editor): replace className with variant prop and update CSS color format
+    
+    - Use variant="default" instead of className="h-full" in EditorContainer to align with component design guidelines
+    - Replace CSS variable @primary with direct hex color value #4caf50 in title class for compatibility
+    - Remove unused CSS variable declaration to clean stylesheet
+
+[33mcommit 0cff9d738bcffdec5f2a6db9c1335b41f49a7adc[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Sun Sep 14 19:53:36 2025 +0800
+
+    refactor(editor): 优化编辑器容器样式和内容验证逻辑
+    
+    重构编辑器页面布局，添加CSS样式类提升可维护性
+    增强Slate内容验证逻辑，处理边缘情况更安全
+    修复CSS选择器语法错误，使用标准属性选择器
+    移除next.config.ts中过时的webpack5配置
+
+[33mcommit fc814b90525ef3793b3ed9163489965259b2b32b[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Sun Sep 14 17:48:31 2025 +0800
+
+    feat: 增强electron启动脚本的调试信息
+    
+    添加环境变量设置和详细日志输出，便于调试Electron启动过程
+
+[33mcommit 52241263667157fd4590dc1c12f5b36e809181df[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Sun Sep 14 17:47:33 2025 +0800
+
+    refactor: 移除 electron-main.ts 中的 devTools 选项并删除 math.html 文件
+    
+    移除 electron-main.ts 中的 devTools 配置项，改为在开发模式下通过 mainWindow.webContents.openDevTools() 动态打开开发者工具
+    删除不再使用的 math.html 文件及其相关功能
+
+[33mcommit bacfc02012bcf06259534d82ae2d20afc547471f[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Sun Sep 14 17:41:12 2025 +0800
+
+    fix: 为TS_NODE_COMPILER_OPTIONS添加moduleResolution配置
+    
+    添加node模块解析配置以确保TypeScript模块解析行为一致
+
+[33mcommit 4e3e154d775b374fd145e857fbf3ca1602e1e90b[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Sun Sep 14 17:39:31 2025 +0800
+
+    refactor(配置): 优化TypeScript和Electron启动配置
+    
+    调整tsconfig.json配置，移除冗余选项并重新组织设置
+    更新electron-start.js以使用独立配置并添加错误处理
+
+[33mcommit c1730f119eb6c65d2105abaa51b363f29910a783[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Sun Sep 14 17:35:27 2025 +0800
+
+    refactor(electron): 优化Electron启动配置
+    
+    - 使用transpile-only模式提升ts-node性能
+    - 修改package.json中的主入口和启动命令
+    - 添加CommonJS模块配置注释
+
+[33mcommit 7189d7e6c5e14f3c864cc4af9ba950eac23a6b4f[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Sun Sep 14 17:22:27 2025 +0800
+
+    build: 更新Electron启动配置以支持TypeScript
+    
+    添加electron-start.js作为入口文件并更新tsconfig.json配置
+    修改package.json中的main字段和dev:electron脚本
+    添加ts-node依赖以支持直接运行TypeScript文件
+
+[33mcommit 829ef44bfaa583e6e2529f786acaef109f6c9608[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Sun Sep 14 16:55:18 2025 +0800
+
+    fix: 将electron开发模式端口从3000改为3001
+
+[33mcommit f6d21661fe2c80bf17709007159372a5f4af12e9[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Sun Sep 14 16:51:05 2025 +0800
+
+    feat(electron): 添加Electron应用基础配置和功能
+    
+    添加tsconfig.electron.json配置文件
+    实现preload.js安全通信桥接
+    完善electron-main.ts主进程逻辑
+    更新package.json构建配置和依赖
+
+[33mcommit fa9195497b618b4606bb53d1c21881fb5abcab33[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Sun Sep 14 16:44:16 2025 +0800
+
+    refactor(editorCore): 优化文档结构处理逻辑并添加内容更新机制
+    
+    重构 getValidContent 函数以更精确处理 Slate 文档结构，保留原始类型和其他属性
+    移除冗余的 processChildren 函数，直接在主函数中处理子节点
+    添加 useEffect 钩子确保编辑器内容能正确更新
+
+[33mcommit c4f6a1f5a0e7435f09de1b251b1d2da66e9fcefb[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Sun Sep 14 16:41:00 2025 +0800
+
+    refactor(editorCore): 重构文档内容处理逻辑并移除协同编辑代码
+    
+    重构getValidContent函数以更健壮地处理不同格式的文档内容
+    移除未使用的协同编辑相关代码和状态
+    简化编辑器初始化逻辑并优化自动保存功能
+
+[33mcommit dc5ac92cb13b0da57600b17a589605d5c43ab6e5[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Sun Sep 14 16:21:20 2025 +0800
+
+    fix(EditorCtx): 修复文档内容解析逻辑
+    
+    确保文档内容被正确解析为JSON对象，当内容不是数组时自动包装成数组格式。解析失败时提供默认错误内容。
+
+[33mcommit 551a925e2bf81e4d210cd9f5464b990f4e30efc1[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Sun Sep 14 16:18:48 2025 +0800
+
+    fix(editorCore): 修复文档保存逻辑并添加错误处理
+    
+    放宽保存条件允许空文档保存，并添加异步请求的错误处理。移除有问题的useImperativeHandle调用。
+
+[33mcommit a503fcc9f6d15e0107d5d1a905b807423e5ba372[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Sun Sep 14 16:04:20 2025 +0800
+
+    chore(deps): update and add multiple dependencies in package-lock.json
+    
+    - Upgrade @ant-design/icons to version 6.0.2 with updated dependencies
+    - Add new @heroui packages including accordion, modal, react, system, and theme
+    - Add additional dependencies such as css-loader, dayjs, framer-motion, openai, style-loader, ws, y-websocket, yjs
+    - Add development dependencies: concurrently, y-leveldb
+    - Update dependency versions for several @heroui scoped packages with their peer dependencies adjusted accordingly
+    - Remove some older @humanfs and @humanwhocodes packages and replace with updated scoped packages
+    - Ensure compatibility with React 18 and 19 in peer dependencies of new packages
+    - Include relevant packages for system utilities, animations, icons, and accessibility features in the dependency tree
+
+[33mcommit 1c7f37067942c59d3f7721b6d000f99b42c3232a[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Sun Sep 14 15:38:19 2025 +0800
+
+    fix(editor): ensure valid initial content structure and improve initialization
+    
+    - Add function to validate and normalize initial content to always produce valid Slate nodes
+    - Support string and object content inputs with robust parsing and fallback
+    - Simplify editorConfig creation; remove unnecessary dependencies
+    - Set initial editor content asynchronously using Slate API for stable initialization
+    - Add error handling to prevent editor content initialization failures
+    - Remove unused Yjs-related editor wrapping and related conditional logic
+
+[33mcommit 4bac32dda03da0fe91f974065f5c7ccad42c7193[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Sun Sep 14 15:29:15 2025 +0800
+
+    fix(editor): correct withYjs function name and button type
+    
+    - Fix typo in withYjs function name in EditorCore component
+    - Add new patterns to suppress hydration warnings in hydration-warning-suppressor
+    - Update Button component to use type="danger" instead of danger prop in EditorCtx page
+
+[33mcommit f7a2231be5cc1131578928e68979b18c197f806f[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Sun Sep 14 15:16:03 2025 +0800
+
+    fix(editor): resolve hydration and dynamic import issues
+    
+    - Add HydrationWarningSupressor and suppressHydrationWarning to root layout
+    - Change CalendarEle import to dynamic import with SSR disabled
+    - Adjust logger import and create editorLogger instance with log level INFO
+    - Refactor deleteDoc function to ensure proper operation within EditorCtx component
+
+[33mcommit 443c4cd3cdcf89bca3c871c7703b06c0852e4e58[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Sun Sep 14 15:11:52 2025 +0800
+
+    refactor(ai-chat): wrap SpeechButton with client-only rendering wrapper
+    
+    - Add ClientOnlyWrapper component to render children only on client side
+    - Wrap SpeechButton in AssistantChat page with ClientOnlyWrapper to avoid SSR mismatch
+    - Wrap SpeechButton in ChatBox page with ClientOnlyWrapper for consistent behavior
+    - Provide fallback placeholder to maintain layout before client hydration
+
+[33mcommit fe21a90a03c41525c67b9628337e2d49a3b71ecf[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Sun Sep 14 15:11:32 2025 +0800
+
+    refactor(calendar): enable dynamic import to fix SSR issues
+    
+    - Convert calendar component to client-side only with 'use client' directive
+    - Use dynamic import of '@toast-ui/calendar' and CSS inside useEffect
+    - Initialize calendar instance with ref and cleanup on unmount
+    - Update component from id selector to React ref for mounting the calendar
+    - Change export and component name to CalendarEle for clarity
+    - Modify EditorCtx page to dynamically import calendar component with SSR disabled
+    - Add loading fallback for calendar component during dynamic import
+    - Remove static import of calendar to avoid SSR conflicts
+
+[33mcommit a3dd917b8fd1425049f7cac4d41d66dabb204093[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Sat Sep 13 23:30:36 2025 +0800
+
+    refactor(api/docs): 用 Prisma 替换 mysql2 连接池查询文档
+    
+    移除对 mysql2 连接池的依赖，统一使用 Prisma 进行数据库操作
+
+[33mcommit 07ac834553099b301ceecd1dbf937fe90449b3be[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Sat Sep 13 23:26:41 2025 +0800
+
+    fix(editor): 修复协作插件API导入名称错误并添加concurrently依赖
+    
+    修复了协作插件中错误的API导入名称，将`withYjs`改为正确的`withTYjs`，同时保持导出接口兼容性。添加了concurrently依赖以支持并行运行命令。
+
+[33mcommit 27b9e4f470807b0f0fde61be7756aa1c1246f19f[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Sat Sep 13 23:22:14 2025 +0800
+
+    feat: 添加Y.js协同编辑功能
+    
+    添加Y.js WebSocket服务器和协同编辑支持
+    - 创建yjs-server.js作为WebSocket服务器
+    - 添加@platejs/yjs和相关依赖
+    - 实现协同编辑器核心逻辑
+    - 重构editor-kit和editorCore组件
+    - 添加协同插件和文档管理功能
+
+[33mcommit b22f62b1d5124af0614dd1ac8d68302aa653f59a[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Sat Sep 13 22:58:05 2025 +0800
+
+    feat(api): 添加文档删除API端点
+    
+    实现通过ID删除文档的API端点，包含ID验证、文档存在性检查及错误处理
+
+[33mcommit d4081fe3eafad34087089cc50a57a33f18ca0426[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Sat Sep 13 22:54:39 2025 +0800
+
+    fix(api/docs): 改进DELETE方法的路由参数处理
+    
+    使用正则表达式更可靠地提取URL中的文档ID，并优化错误处理逻辑
+
+[33mcommit 190ecf76a2ee4e99c54888184ae3ff7f3c678621[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Sat Sep 13 22:13:29 2025 +0800
+
+    feat(db): 添加Prisma客户端实例并导出
+    
+    refactor(EditorCtx): 重构删除文档函数并添加日志记录
+    
+    refactor(api/docs): 增强文档API的错误处理和日志功能
+
+[33mcommit 9a6e8f0b0be9f04610348bd6763f38cb318c91fc[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Sat Sep 13 22:01:58 2025 +0800
+
+    feat(utils): 添加日志工具类实现统一日志记录功能
+    
+    实现一个支持多级别日志输出的工具类，包含debug、info、warn、error和fatal级别
+    支持配置日志级别、前缀和时间戳显示
+    提供单例模式和默认实例，方便全局使用
+
+[33mcommit 2a0a7998d6e26ccb40cd195d0c73dc093aebc8a4[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Sat Sep 13 21:44:25 2025 +0800
+
+    fix(文档管理): 修复文档删除功能并改进API错误处理
+    
+    修复前端删除文档时的window未定义问题，确保客户端执行
+    重构DELETE API接口，正确处理URL参数和错误状态
+    统一使用NextResponse并改进所有API端点的错误处理
+
+[33mcommit b539c55cf59d859c862ec5bbc307a2c62f946d37[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Sat Sep 13 21:12:51 2025 +0800
+
+    docs: 添加项目README文件介绍功能特性与技术栈
+
+[33mcommit b9012d54ecd326b75eaa38b528b042b6dfef38ac[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Sat Sep 13 21:06:14 2025 +0800
+
+    build: 添加css-loader和style-loader依赖以支持CSS模块化
+
+[33mcommit 8f151f17f18c51ce4cd2bf873b43fe2e360b5755[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Sat Aug 9 19:47:26 2025 +0800
+
+    保存
+
+[33mcommit b2419f9f4c969a254f8cf716622f505f8dcc8953[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Sat Aug 9 19:25:04 2025 +0800
+
+    feat: 保存
+
+[33mcommit 6ed23b515b731964f451f0d88b0e601c5d7e9fb4[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Sat Aug 9 19:21:54 2025 +0800
+
+    refactor: clean up unused code and improve component structure
+
+[33mcommit ee031c1c0d853bf332458d97646f5864916b8a07[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Sat Aug 9 16:31:17 2025 +0800
+
+    style: 修复代码缩进并优化编辑器内容解析逻辑
+    
+    修复侧边栏通知组件的缩进问题，使其符合代码风格规范
+    优化编辑器核心组件的内容解析逻辑，避免重复解析JSON
+
+[33mcommit b8d0d74bc198945c18ab692e4f9d278f8aac7fd2[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Sat Aug 9 16:26:44 2025 +0800
+
+    chore: 添加空的electron-main.ts文件
+
+[33mcommit e7b5b5c201173cf851837f37734924cfb09adbb8[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Sat Aug 9 15:08:38 2025 +0800
+
+    feat: add @heroui/accordion dependency and update EditorCtx to enhance document management UI
+
+[33mcommit 8e47cf900225be04b59c7db84574410c619ddaec[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Thu Aug 7 23:39:14 2025 +0800
+
+    refactor(Search): remove unused commented code for improved clarity
+
+[33mcommit 94a21f87935b2376cf04ba17995a584f759f3ac6[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Thu Aug 7 23:36:11 2025 +0800
+
+    refactor(Search): clean up commented code and improve readability
+
+[33mcommit d9f9e567051fe40dc35e63af79a46045381b2b45[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Thu Aug 7 23:20:27 2025 +0800
+
+    feat: add LLM configuration modal to sidebar
+    
+    - Integrated LLMConfig component into SiderBar for model configuration.
+    - Added a button to open the modal and included modal content with placeholder text.
+    - Updated sidebar to include new options for "大模型" and "数据库图形化设计".
+
+[33mcommit 868bc2caff56ed3434c732a898d44e9fe46834e3[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Tue Aug 5 23:05:16 2025 +0800
+
+    save
+
+[33mcommit deaaa6a90fe73b4aaaf5f1e8e0520d1d9a9da476[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Sun Aug 3 17:59:37 2025 +0800
+
+    feat: 集成Kimi AI并更新相关配置
+    
+    - 添加openai依赖包用于Kimi AI集成
+    - 更新应用标题为"Blade AI Editor"
+    - 修改AI聊天组件使用Kimi API配置
+    - 新增设置页面表单用于配置AI参数
+    - 添加测试脚本验证Kimi API调用
+
+[33mcommit 310fb48ae9ad081492dabe6ecb6cdde38daf9697[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Sat Aug 2 23:47:16 2025 +0800
+
+    feat(文档操作): 添加setOperator方法以同步文档操作状态
+    
+    在SiderBar和EditorCtx组件中添加setOperator方法，用于同步文档操作状态。修改了PageType接口和页面组件，确保操作状态能在不同组件间正确传递和更新。
+
+[33mcommit b315b76ce1404a755baba000f8a2f27adb4a5642[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Sat Aug 2 23:09:49 2025 +0800
+
+    refactor(editor): 移除调试日志并优化编辑器内容处理逻辑
+    
+    - 删除route.ts中的调试console.log
+    - 优化editorCore.tsx中的内容解析逻辑，处理空内容情况
+    - 移除EditorCtx/index.tsx中未使用的代码和注释
+    - 添加编辑器内容自动上传功能
+
+[33mcommit 28902db0bd112a06cb80952b6201f1e7b153934e[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Sat Aug 2 21:25:14 2025 +0800
+
+    refactor(Search): 将搜索组件重构为模态框形式并添加客户端标记
+    
+    将搜索对话框重构为Ant Design的Modal组件，提升用户体验和一致性
+    添加'use client'标记以支持客户端渲染
+    修改props名称从closeOpen到onOpenChange以保持命名一致性
+
+[33mcommit 419099f2976be6be14acefd7d2a91a790ebf429b[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Sat Aug 2 19:07:42 2025 +0800
+
+    refactor(Search): 重构搜索组件样式和交互逻辑
+    
+    - 移除antd Modal组件，使用自定义样式模块
+    - 添加键盘快捷键(⌘K)控制搜索框开关
+    - 优化组件结构，移除冗余状态管理
+    - 添加CSS模块样式文件
+
+[33mcommit 2d567e1cc4e1904c5579f072e1094c1c3a1fc6aa[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Sat Aug 2 17:49:58 2025 +0800
+
+    feat(Search): 添加搜索组件基础功能
+    
+    实现搜索弹窗组件，包含基础UI和交互逻辑
+
+[33mcommit 985d37dc8df8dc9c41efeabc58654b261ea32c97[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Sat Aug 2 16:46:37 2025 +0800
+
+    feat(ui): 添加设置组件并优化侧边栏布局
+    
+    - 新增Setting组件用于展示设置弹窗
+    - 调整侧边栏布局结构，将底部操作按钮分组
+    - 修复样式文件中的对齐问题和间距
+    - 为Copilot组件添加边框和高度样式
+
+[33mcommit 75d78b7ff65486605d555cfea33c6156a586a5c6[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Sat Aug 2 16:04:55 2025 +0800
+
+    feat(侧边栏): 添加悬停效果并更新依赖
+    
+    为侧边栏图标添加悬停效果，背景色变为浅蓝色并显示指针
+    添加 react-aria-components 依赖
+    移除多余空行并优化侧边栏组件结构
+
+[33mcommit b3a507825dd12e293a3c037029b06fe9f96b0285[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Tue Jul 29 12:01:20 2025 +0800
+
+    feat: 新加
+
+[33mcommit 65ab5be3c04b8e0191c2c2f6ace498f1093736fb[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Tue Jul 29 10:02:31 2025 +0800
+
+    feat: 新加按钮
+
+[33mcommit affc8b6cd593669d3ab73d64f3a59f3d9da50f86[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Tue Jul 29 09:17:18 2025 +0800
+
+    feat: 对话的弹层
+
+[33mcommit 44245da4b9b3f90ef02835ded2e3393437b94f3b[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Tue Jul 29 09:05:13 2025 +0800
+
+    feat：保存
+
+[33mcommit 65f44c5bdaaf4e6c576ac1efda0d7394d82e1b20[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Mon Jul 28 18:26:39 2025 +0800
+
+    feat: 存储
+
+[33mcommit 2281b7ebeb62127d9a646e7448627a7936b812a4[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Mon Jul 28 17:12:51 2025 +0800
+
+    save
+
+[33mcommit c5158898c3a576f0d26adeaa710b211198b6fd0b[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Mon Jul 28 16:29:36 2025 +0800
+
+    feat: ai 聊天
+
+[33mcommit 020564b6462582a7f2bab97167160c41a0ca7f7a[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Mon Jul 28 16:08:52 2025 +0800
+
+    feat: 聊天
+
+[33mcommit 2a8d43d143ff2619c95b838356fe0e6c9570db1b[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Mon Jul 28 15:35:31 2025 +0800
+
+    feat: 新建文档
+
+[33mcommit f98af1f967160f367e15363c4abb42cbef69ccfe[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Sun Jul 27 17:13:12 2025 +0800
+
+    保存
+
+[33mcommit 58b2926f927112763a6b54620487da0fed5d72bd[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Fri Jul 25 21:18:22 2025 +0800
+
+    feat: 删除冗余
+
+[33mcommit 3a61eaba9f50b18b354477796aa4643d33af60c8[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Thu Jul 24 21:47:15 2025 +0800
+
+    feat: 保存
+
+[33mcommit c9ff20dac7bdee603c8091b52e596efa62c4884c[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Thu Jul 24 20:52:26 2025 +0800
+
+    feat: 保存
+
+[33mcommit ac1d7abc5f808ed564cd8fe3b717eee13633b751[m
+Author: fengjutian <2640111081@qq.com>
+Date:   Thu Jul 24 11:04:13 2025 +0800
+
+    feat: 主体内容
+
+[33mcommit 70641010507fca6f37799a396119de9c01e61a83[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Wed Jul 23 22:14:24 2025 +0800
+
+    feat: 新加图片
+
+[33mcommit a52a63fe806e1cd89e85d6e2937d3ea287723389[m
+Author: fengjutian <2640111081@qq.com>
+Date:   Wed Jul 23 18:30:09 2025 +0800
+
+    feat: 保存
+
+[33mcommit 452f577d299a6b2ab381a7f78472c43dad9ab646[m
+Merge: 3865b82 62fcbf1
+Author: fengjutian <2640111081@qq.com>
+Date:   Wed Jul 23 17:22:53 2025 +0800
+
+    Merge branch 'main' of https://github.com/fengjutian/ai-editor
+
+[33mcommit 3865b82e8f51ce2623fd0fb8ac54849d5ba0a666[m
+Author: fengjutian <2640111081@qq.com>
+Date:   Wed Jul 23 17:22:48 2025 +0800
+
+    feat: prima生成数据库表
+
+[33mcommit 62fcbf1baf0ada15a22d0911597ab56661c78e05[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Wed Jul 23 11:49:09 2025 +0800
+
+    Update README.md
+
+[33mcommit 904a0edc09cb33364c8dcf8db268d30784e3e240[m
+Author: fengjutian <2640111081@qq.com>
+Date:   Wed Jul 23 11:38:17 2025 +0800
+
+    feat: 删除冗余
+
+[33mcommit 126a108b2a3e6c52e611065b16f84ddd292565a5[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Wed Jul 16 22:14:42 2025 +0800
+
+    feat: 保存
+
+[33mcommit 976cf2e1d33612f59b132a46872c81b3c09e0990[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Tue Jul 15 22:35:03 2025 +0800
+
+    feat: save
+
+[33mcommit 19cf07014cca9bf69358576896b4f4344b40d048[m
+Author: fengjutian <fjutian@foxmail.com>
+Date:   Sun Jul 13 16:55:07 2025 +0800
+
+    feat: save
+
+[33mcommit ccca6bc6cc94e4db0069e862e7f6537bccbe9081[m
+Author: fengjutian <2640111081@qq.com>
+Date:   Sat Jul 12 20:01:16 2025 +0800
+
+    feat: 调用数据库获取文档列表
+
+[33mcommit f8c1b4cf6c7360c5255eb6a60a44fe5e256581ee[m
+Author: fengjutian <2640111081@qq.com>
+Date:   Sat Jul 12 17:30:14 2025 +0800
+
+    feat: 引入ollama服务
+
+[33mcommit dfbfaa24f2b09859fafbf6dbd8a9957816a194e4[m
+Author: fengjutian <2640111081@qq.com>
+Date:   Sun Jul 6 14:55:50 2025 +0800
+
+    feat: 文件说明
+
+[33mcommit 6a9dd2ab70ea2fc41d48c40c900fd5960ea62aee[m
+Author: fengjutian <2640111081@qq.com>
+Date:   Sun Jul 6 14:49:49 2025 +0800
+
+    feat: 保存
+
+[33mcommit 18cf5293714fa1d50dea97d21513b9543434bd0d[m
+Author: fengjutian <2640111081@qq.com>
+Date:   Sun Jul 6 14:38:36 2025 +0800
+
+    feat: 保存
+
+[33mcommit 642846eeb259d8e6adf5e629fb340318e75d5509[m
+Author: fengjutian <2640111081@qq.com>
+Date:   Sun Jul 6 14:29:41 2025 +0800
+
+    feta: 读取已经创建的文件
+
+[33mcommit 509f05d73e47b2dc7e3c5fe2d2ffcb48ba0a89af[m
+Author: fengjutian <2640111081@qq.com>
+Date:   Sun Jul 6 14:07:17 2025 +0800
+
+    feta: 创建文件
+
+[33mcommit e1787e08313e828121076c47540edd12f9a0baa8[m
+Author: fengjutian <2640111081@qq.com>
+Date:   Sun Jul 6 13:29:10 2025 +0800
+
+    feat: api  书写
+
+[33mcommit 3d0796c975fc830983480223c13c5c4868ef889a[m
+Author: fengjutian <2640111081@qq.com>
+Date:   Wed Jun 25 22:47:01 2025 +0800
+
+    feat: save
+
+[33mcommit 4a5947331258010266ac6e95a58a520f677e1321[m
+Author: fengjutian <2640111081@qq.com>
+Date:   Tue Jun 24 21:53:26 2025 +0800
+
+    feat: 切换编辑器内容
+
+[33mcommit 39e606b8e73718d2eac9312004fc287e7c2fda06[m
+Author: fengjutian <2640111081@qq.com>
+Date:   Tue Jun 24 20:32:20 2025 +0800
+
+    feat: 添加文章列表
+
+[33mcommit 4e9cce74e982ab9bfa2c4811a4148fc9426a355c[m
+Author: fengjutian <2640111081@qq.com>
+Date:   Tue Jun 24 20:12:12 2025 +0800
+
+    feat: 页面重新布局
+
+[33mcommit 70c9773a901ce773b4d2146072f837106ae875c4[m
+Author: fengjutian <2640111081@qq.com>
+Date:   Sun Jun 22 17:00:48 2025 +0800
+
+    init

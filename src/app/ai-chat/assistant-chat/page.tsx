@@ -30,7 +30,32 @@ import {
 import type { Conversation } from '@ant-design/x/es/conversations';
 import { Button, GetProp, GetRef, Image, Popover, Space, Spin, message } from 'antd';
 import { createStyles } from 'antd-style';
+// 将client-only导入移到文件顶部
+'use client';
+import 'client-only';
+
+import { /* 其他导入保持不变 */ } from '@ant-design/icons';
+import {
+  Attachments,
+  type AttachmentsProps,
+  Bubble,
+  Conversations,
+  Prompts,
+  Sender,
+  Suggestion,
+  Welcome,
+  useXAgent,
+  useXChat,
+} from '@ant-design/x';
+import type { Conversation } from '@ant-design/x/es/conversations';
+import { Button, GetProp, GetRef, Image, Popover, Space, Spin, message } from 'antd';
+import { createStyles } from 'antd-style';
 import dayjs from 'dayjs';
+// 删除错误位置的client-only导入
+import dayjs from 'dayjs';
+// 删除以下两行
+//    // 在文件顶部添加导入
+//            import 'client-only';
 import React, { useEffect, useRef, useState } from 'react';
 
 type BubbleDataType = {
@@ -453,6 +478,9 @@ export const Copilot = (props: CopilotProps) => {
               />
             }
             onPasteFile={onPasteFile}
+        
+            
+            // 修改actions回调函数中的SpeechButton使用
             actions={(_, info) => {
               const { SendButton, LoadingButton, SpeechButton } = info.components;
               return (
