@@ -1,4 +1,11 @@
-'use client';
+// Before: Static import (causes SSR issues)
+import CalendarEle from "@/app/widgets/calendar";
+
+// After: Dynamic import with SSR disabled
+const CalendarEle = dynamic(() => import('@/app/widgets/calendar'), {
+  ssr: false,
+  loading: () => <div>Loading calendar...</div>
+});'use client';
 
 import './index.module.css';
 import EditorCore from "@/app/editorCore";
@@ -6,8 +13,14 @@ import React, { useEffect, useState } from "react";
 import { DocItem } from "@/app/PageType";
 import { Operator } from "@/app/scheme";
 import { List, Avatar, ButtonGroup, Button } from '@douyinfe/semi-ui';
-import CalendarEle from "@/app/widgets/calendar";
+import dynamic from 'next/dynamic';
 import { logger, Logger } from '@/utils/logger'; // 修改导入，同时导入Logger类
+
+// Dynamically import the calendar component with SSR disabled
+const CalendarEle = dynamic(() => import('@/app/widgets/calendar'), {
+  ssr: false,
+  loading: () => <div>Loading calendar...</div>
+});
 
 export default function EditorCtx({ operator, docList, setOperator }: { operator: Operator, docList: DocItem[], setOperator: (operator: Operator) => void }) {
   const [curDoc, setCurDoc] = useState<DocItem>({ id: '', title: '', content: [] });
