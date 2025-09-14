@@ -70,31 +70,35 @@ export default function EditorCore({ id, content, title }: { id: string; content
   const [yDoc, setYDoc] = useState<YDoc | null>(null);
   const [provider, setProvider] = useState<WebsocketProvider | null>(null);
 
-  // 初始化协同管理器
-  useEffect(() => {
-    if (!id) return;
+  // 初始化协同管理器 - Currently disabled for stability
+  // useEffect(() => {
+  //   if (!id) return;
 
-    const manager = createCollaborationManager(id);
-    setCollaborationManager(manager);
-    setYDoc(manager.yDoc);
-    setProvider(manager.provider);
+  //   const manager = createCollaborationManager(id);
+  //   setCollaborationManager(manager);
+  //   setYDoc(manager.yDoc);
+  //   setProvider(manager.provider);
 
-    // 连接到协同服务器
-    manager.connect();
+  //   // 连接到协同服务器
+  //   manager.connect();
 
-    // 组件卸载时清理资源
-    return () => {
-      manager.disconnect();
-      manager.yDoc.destroy();
-    };
-  }, [id]);
+  //   // 组件卸载时清理资源
+  //   return () => {
+  //     manager.disconnect();
+  //     manager.yDoc.destroy();
+  //   };
+  // }, [id]);
 
   // 创建编辑器配置
   const editorConfig = useMemo(() => {
+    // For now, keep it simple to ensure stability
     return {
       plugins: EditorKit,
       value: initialValue
     };
+    
+    // TODO: Re-enable Yjs collaboration once core functionality is stable
+    // The server is now working at ws://localhost:1234
   }, [initialValue]);
 
   // 创建支持协同的编辑器
