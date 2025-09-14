@@ -1,5 +1,6 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, Menu } from 'electron';
 import * as path from 'path';
+import * as url from 'url';
 
 // 在开发模式下，你可以让 Electron 加载本地服务器地址；
 // 在生产模式下，加载打包好的本地文件。
@@ -12,33 +13,61 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: false, // 建议关闭 nodeIntegration，提升安全
       contextIsolation: true,
+      preload: path.join(__dirname, 'preload.js'),
     },
   });
+
+  // 设置应用菜单
+  Menu.setApplicationMenu(null); // 可选：隐藏默认菜单
 
   if (isDev) {
     // 开发模式：加载 localhost
     mainWindow.loadURL('http://localhost:3000');
-    // 可选：打开开发者工具
+    // 打开开发者工具
     mainWindow.webContents.openDevTools();
   } else {
     // 生产模式：加载打包后的本地文件
-    // Next.js build 后，默认使用 next start (本地server) 或 next export (静态文件)
-    // 这里示例使用 next start 的方式
-    const startUrl = `http://localhost:3000`; 
+    const startUrl = url.format({
+      pathname: path.join(__dirname, 'out', 'index.html'),
+      protocol: 'file:',
+      slashes: true
+    });
     mainWindow.loadURL(startUrl);
   }
+
+  // 窗口事件监听
+  mainWindow.on('closed', () => {
+    // 清理
+  });
 }
 
-app.whenReady().then(() => {
-  createWindow();
+// 确保只有一个实例运行
+const gotTheLock = app.requestSingleInstanceLock();
 
-  app.on('activate', () => {
-    // macOS 上，当 dock 图标被点击且没有其他窗口打开时:
-    if (BrowserWindow.getAllWindows().length === 0) {
-      createWindow();
+if (!gotTheLock) {
+  app.quit();
+} else {
+  app.on('second-instance', (event, commandLine, workingDirectory) => {
+    // 当运行第二个实例时，聚焦到主窗口
+    const windows = BrowserWindow.getAllWindows();
+    if (windows.length) {
+      const mainWindow = windows[0];
+      if (mainWindow.isMinimized()) mainWindow.restore();
+      mainWindow.focus();
     }
   });
-});
+
+  app.whenReady().then(() => {
+    createWindow();
+
+    app.on('activate', () => {
+      // macOS 上，当 dock 图标被点击且没有其他窗口打开时:
+      if (BrowserWindow.getAllWindows().length === 0) {
+        createWindow();
+      }
+    });
+  });
+}
 
 // 所有窗口关闭时退出应用 (在 macOS 除外)
 app.on('window-all-closed', () => {
