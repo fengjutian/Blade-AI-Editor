@@ -130,21 +130,30 @@ export default function EditorCore({ id, content, title }: { id: string; content
     if (!editor || !id) return;
 
     // 监听内容变化并保存
-    const handleContentChange = () => {
-      if (editor.children && editor.children.length > 0 && 
-          editor.children[0].children && editor.children[0].children[0].text) {
-        fetch('/api/docs', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            id: id,
-            title: title,
-            content: JSON.stringify(editor.children),
-            action: 'update'
-          }),
-        });
+    const handleContentChange = async () => {
+      try {
+        // 放宽保存条件，确保空文档也能保存
+        if (editor.children && editor.children.length >= 0) {
+          const response = await fetch('/api/docs', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              id: id,
+              title: title,
+              content: JSON.stringify(editor.children),
+              action: 'update'
+            }),
+          });
+          
+          // 添加错误处理
+          if (!response.ok) {
+            console.error('保存文档失败:', await response.json());
+          }
+        }
+      } catch (error) {
+        console.error('保存请求异常:', error);
       }
     };
 
@@ -153,6 +162,11 @@ export default function EditorCore({ id, content, title }: { id: string; content
 
     return () => clearInterval(saveInterval);
   }, [editor, id, title]);
+
+  // 移除有问题的useImperativeHandle调用
+  // React.useImperativeHandle((props as any).ref, () => ({
+  //   saveDocument
+  // }));
 
   return (
     <Plate editor={editor}>
