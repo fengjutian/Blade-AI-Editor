@@ -85,8 +85,31 @@ export default function EditorCtx({ operator, docList, setOperator }: { operator
     e.preventDefault();
     setOperatorState(Operator.EditDoc);
     setOperator(Operator.EditDoc);
-    console.log('item.content', item);
-    setCurDoc(item);
+    
+    // 修复：确保内容被正确解析
+    let parsedContent = item.content;
+    try {
+      // 如果content是字符串，尝试解析为JSON对象
+      if (typeof parsedContent === 'string') {
+        parsedContent = JSON.parse(parsedContent);
+      }
+      // 如果解析后是对象但不是数组，包装成数组
+      if (!Array.isArray(parsedContent)) {
+        parsedContent = [parsedContent];
+      }
+    } catch (error) {
+      console.error('解析文档内容失败:', error);
+      parsedContent = [{ type: 'p', children: [{ text: '解析内容失败' }] }];
+    }
+    
+    // 使用解析后的内容创建新的文档对象
+    const docWithParsedContent = {
+      ...item,
+      content: parsedContent
+    };
+    
+    console.log('item.content', docWithParsedContent);
+    setCurDoc(docWithParsedContent);
   }
 
   useEffect(() => {
