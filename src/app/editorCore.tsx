@@ -187,11 +187,13 @@ export default function EditorCore({ id, content, title }: { id: string; content
 
   return (
     <Plate editor={editor}>
-      <EditorContainer variant="demo">
+      {/* 使用variant="default"代替className="h-full"，符合组件设计规范 */}
+      <EditorContainer variant="default">
         <Editor />
       </EditorContainer>
     </Plate>
   );
 }
+
 
 
