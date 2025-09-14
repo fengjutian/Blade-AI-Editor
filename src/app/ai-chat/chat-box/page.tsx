@@ -35,6 +35,7 @@ import { Avatar, Button, Flex, type GetProp, Space, Spin, message } from 'antd';
 import { createStyles } from 'antd-style';
 import dayjs from 'dayjs';
 import React, { useEffect, useRef, useState } from 'react';
+import ClientOnlyWrapper from '@/components/ui/no-ssr-speech-button';
 
 type BubbleDataType = {
   role: string;
@@ -588,7 +589,9 @@ const Independent: React.FC = () => {
           const { SendButton, LoadingButton, SpeechButton } = info.components;
           return (
             <Flex gap={4}>
-              <SpeechButton className={styles.speechButton} />
+              <ClientOnlyWrapper fallback={<div style={{ width: 32, height: 32 }} />}>
+                <SpeechButton className={styles.speechButton} />
+              </ClientOnlyWrapper>
               {loading ? <LoadingButton type="default" /> : <SendButton type="primary" />}
             </Flex>
           );
