@@ -1,12 +1,23 @@
+<<<<<<< HEAD
 'use client';
 import './index.module.css';
+=======
+// Before: Static import (causes SSR issues)
+'use client';
+
+import styles from './index.module.css';
+>>>>>>> 31c46778ff1379c0cd848ddc66fd910da3a3df7d
 import EditorCore from "@/app/editorCore";
 import React, { useEffect, useState } from "react";
 import { DocItem } from "@/app/PageType";
 import { Operator } from "@/app/scheme";
 import { List, Avatar, ButtonGroup, Button } from '@douyinfe/semi-ui';
 import dynamic from 'next/dynamic';
+<<<<<<< HEAD
 import { logger, Logger } from '@/utils/logger';
+=======
+import { logger, Logger, LogLevel } from '@/utils/logger'; // 修改导入，同时导入Logger类
+>>>>>>> 31c46778ff1379c0cd848ddc66fd910da3a3df7d
 
 // Dynamically import the calendar component with SSR disabled
 const CalendarEle = dynamic(() => import('@/app/widgets/calendar'), {
@@ -38,9 +49,8 @@ export default function EditorCtx({ operator, docList, setOperator }: { operator
     });
   };
 
-  // 添加删除文档函数
   // 为编辑器组件创建专用的日志实例 - 修复这里
-  const editorLogger = Logger.getInstance({ prefix: 'EDITOR_CTX' });
+  const editorLogger = Logger.getInstance({ prefix: 'EDITOR_CTX', level: LogLevel.INFO });
   
   // 在组件中修改删除文档函数
   const deleteDoc = async (e: React.MouseEvent, id: string) => {
@@ -84,8 +94,31 @@ export default function EditorCtx({ operator, docList, setOperator }: { operator
     e.preventDefault();
     setOperatorState(Operator.EditDoc);
     setOperator(Operator.EditDoc);
-    console.log('item.content', item);
-    setCurDoc(item);
+    
+    // 修复：确保内容被正确解析
+    let parsedContent = item.content;
+    try {
+      // 如果content是字符串，尝试解析为JSON对象
+      if (typeof parsedContent === 'string') {
+        parsedContent = JSON.parse(parsedContent);
+      }
+      // 如果解析后是对象但不是数组，包装成数组
+      if (!Array.isArray(parsedContent)) {
+        parsedContent = [parsedContent];
+      }
+    } catch (error) {
+      console.error('解析文档内容失败:', error);
+      parsedContent = [{ type: 'p', children: [{ text: '解析内容失败' }] }];
+    }
+    
+    // 使用解析后的内容创建新的文档对象
+    const docWithParsedContent = {
+      ...item,
+      content: parsedContent
+    };
+    
+    console.log('item.content', docWithParsedContent);
+    setCurDoc(docWithParsedContent);
   }
 
   useEffect(() => {
@@ -100,11 +133,11 @@ export default function EditorCtx({ operator, docList, setOperator }: { operator
   }, [])
 
   return (
-    <div className="title">
-
+    <div className={styles['editor-ctx-container']}>
       {/* 所有文档 */}
-      {
-        operatorState === Operator.AllDoc && (
+      {operatorState === Operator.AllDoc && (
+        <div className={styles['docs-list-container']}>
+          <h2 className={styles['page-title']}>所有文档</h2>
           <List
             bordered
             dataSource={doc}
@@ -120,7 +153,7 @@ export default function EditorCtx({ operator, docList, setOperator }: { operator
               extra={
                 <ButtonGroup theme="borderless">
                   <Button>编辑</Button>
-                  <Button danger onClick={(e) => deleteDoc(e, item.id)}>删除</Button>
+                  <Button type="danger" onClick={(e) => deleteDoc(e, item.id)}>删除</Button>
                   <Button>更多</Button>
                 </ButtonGroup>
               }
@@ -128,22 +161,28 @@ export default function EditorCtx({ operator, docList, setOperator }: { operator
             </List.Item>
           }
           />
-        )
-      }
+        </div>
+      )}
 
       {/* 日历 */}
-      {
-        operatorState === Operator.Calendar && (
+      {operatorState === Operator.Calendar && (
+        <div className={styles['calendar-container']}>
+          <h2 className={styles['page-title']}>日历</h2>
           <CalendarEle />
-        )
-      }
+        </div>
+      )}
 
       {/* 编辑 */}
-      {
-        operatorState === Operator.EditDoc && (
-          <EditorCore id={curDoc.id} title={curDoc.title} content={curDoc.content}/>
-        )
-      }
+      {operatorState === Operator.EditDoc && (
+        <div className={styles['editor-container']}>
+          <div className={styles['editor-header']}>
+            <h2 className={styles['page-title']}>{curDoc.title || '无标题文档'}</h2>
+          </div>
+          <div className={styles['editor-content']}>
+            <EditorCore id={curDoc.id} title={curDoc.title} content={curDoc.content}/>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

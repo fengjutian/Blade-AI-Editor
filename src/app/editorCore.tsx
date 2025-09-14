@@ -1,88 +1,166 @@
 'use client';
 import * as React from 'react';
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Plate, usePlateEditor } from 'platejs/react';
 import { EditorKit } from '@/components/editor-kit';
 import { Editor, EditorContainer } from '@/components/ui/editor';
-import { createCollaborationManager, withYjs } from '@/components/editor/plugins/collaboration-kit';
+import { DocItem } from '@/app/PageType';
 
-// 导入yjs相关类型
-import type { Doc as YDoc } from 'yjs';
-import type { WebsocketProvider } from 'y-websocket';
-
-export default function EditorCore({ id, content, title }: { id: string; content: any[]; title: string }) {
-  const initialValue: any[] = content ?? [];
-  const [collaborationManager, setCollaborationManager] = useState<any>(null);
-  const [yDoc, setYDoc] = useState<YDoc | null>(null);
-  const [provider, setProvider] = useState<WebsocketProvider | null>(null);
-
-  // 初始化协同管理器
-  useEffect(() => {
-    if (!id) return;
-
-    const manager = createCollaborationManager(id);
-    setCollaborationManager(manager);
-    setYDoc(manager.yDoc);
-    setProvider(manager.provider);
-
-    // 连接到协同服务器
-    manager.connect();
-
-    // 组件卸载时清理资源
-    return () => {
-      manager.disconnect();
-      manager.yDoc.destroy();
-    };
-  }, [id]);
-
-  // 创建编辑器配置
-  const editorConfig = useMemo(() => {
-    if (!yDoc || !collaborationManager) {
-      return {
-        plugins: EditorKit,
-        value: () => Array.isArray(initialValue) ? initialValue : []
+// 专门处理Slate文档结构的函数，确保正确提取text属性
+const getValidContent = (inputContent: any): any[] => {
+  console.log('处理前的内容类型:', typeof inputContent, Array.isArray(inputContent));
+  console.log('原始内容:', inputContent);
+  
+  // 空值处理
+  if (!inputContent || (Array.isArray(inputContent) && inputContent.length === 0)) {
+    return [{ type: 'p', children: [{ text: '' }] }];
+  }
+  
+  // 特殊情况处理：如果内容是字符串，尝试解析
+  if (typeof inputContent === 'string') {
+    try {
+      // 尝试解析为JSON
+      const parsed = JSON.parse(inputContent);
+      // 递归处理解析后的内容
+      return getValidContent(parsed);
+    } catch {
+      // 解析失败，作为普通文本处理
+      return [{ type: 'p', children: [{ text: inputContent }] }];
+    }
+  }
+  
+  // 规范化为数组
+  const contentArray = Array.isArray(inputContent) ? inputContent : [inputContent];
+  
+  // 处理每个节点，增强验证
+  return contentArray.map((item: any) => {
+    // 基本类型或null处理
+    if (item === null || typeof item !== 'object') {
+      return { 
+        type: 'p', 
+        children: [{ text: String(item || '') }] 
       };
     }
-
-    return {
-      plugins: [...EditorKit],
-      value: () => Array.isArray(initialValue) ? initialValue : [],
-      // 使用正确的API名称
-      editor: withTYjs({
-        yDoc,
-        // 可以在这里添加其他Yjs相关配置
-      })
-    };
-  }, [yDoc, collaborationManager, initialValue]);
-
-  // 创建支持协同的编辑器
-  const editor = usePlateEditor(editorConfig);
-
-  // 初始化内容和自动保存逻辑保持不变
-  useEffect(() => {
-    // 初始化内容
-    if (content && editor) {
-      try {
-        const parseContent = JSON.parse(content);
-        if (parseContent.length > 0) {
-          // 根据实际的编辑器API设置内容
-          editor.children = parseContent;
+    
+    // 检查是否已经是有效的Slate文档结构
+    if (item.type && item.children && Array.isArray(item.children)) {
+      // 验证和清理children
+      const validChildren = item.children.map((child: any) => {
+        // 确保 text 节点的安全性
+        if (typeof child === 'object' && child !== null && 'text' in child) {
+          return { text: String(child.text || '') };
         }
+        // 如果是字符串，转换为text节点
+        if (typeof child === 'string') {
+          return { text: child };
+        }
+        // 其他情况转换为空文本
+        return { text: String(child || '') };
+      });
+      
+      // 确保至少有一个children
+      if (validChildren.length === 0) {
+        validChildren.push({ text: '' });
+      }
+      
+      return {
+        type: item.type,
+        children: validChildren,
+        // 保留原始属性，但过滤掉不安全的属性
+        ...Object.fromEntries(
+          Object.entries(item).filter(([key, value]) => {
+            // 只保留安全的属性
+            return key !== 'type' && key !== 'children' && 
+                   typeof value !== 'function' && 
+                   (typeof value !== 'object' || 
+                    (typeof value === 'object' && value !== null && !Array.isArray(value)));
+          })
+        )
+      };
+    }
+    
+    // 如果是对象但没有children，尝试从中提取文本
+    return {
+      type: 'p',
+      children: [{ text: extractTextFromObject(item) }]
+    };
+  }).filter(Boolean); // 过滤掉可能的空值
+};
+
+// 从对象中提取文本内容的辅助函数
+const extractTextFromObject = (obj: any): string => {
+  // 检查常见的文本属性
+  if (obj.text) return String(obj.text);
+  if (obj.content && typeof obj.content === 'string') return obj.content;
+  if (obj.value && typeof obj.value === 'string') return obj.value;
+  
+  // 特殊处理children数组中的text
+  if (obj.children && Array.isArray(obj.children)) {
+    const textFromChildren = obj.children
+      .map((child: any) => {
+        if (child.text) return child.text;
+        if (typeof child === 'string') return child;
+        return extractTextFromObject(child);
+      })
+      .join(' ');
+    
+    return textFromChildren || JSON.stringify(obj);
+  }
+  
+  // 如果是数组，递归处理
+  if (Array.isArray(obj)) {
+    return obj.map((item: any) => extractTextFromObject(item)).join(' ');
+  }
+  
+  // 默认返回对象的字符串表示
+  return String(obj);
+};
+
+export default function EditorCore({ id, content, title }: { id: string; content: DocItem['content']; title: string }) {
+  // 获取有效的初始内容
+  const initialValue = useMemo(() => {
+    const processed = getValidContent(content);
+    console.log('处理后的内容:', processed);
+    return processed;
+  }, [content]);
+  
+  // 创建编辑器实例，先不集成协同功能避免错误
+  const editor = usePlateEditor({
+    plugins: EditorKit,
+    value: initialValue
+  });
+  
+  // 确保内容更新 - 使用正确的 Slate API
+  useEffect(() => {
+    if (editor && initialValue) {
+      try {
+        // 使用 Slate 的正确 API 来更新内容
+        setTimeout(() => {
+          editor.tf.reset();
+          editor.tf.insertNodes(initialValue);
+        }, 0);
       } catch (error) {
-        console.error('解析内容失败:', error);
+        console.error('更新编辑器内容失败:', error);
+        // 使用安全的回退方案
+        setTimeout(() => {
+          try {
+            editor.tf.reset();
+            editor.tf.insertNodes([{ type: 'p', children: [{ text: '内容加载失败，请刷新页面重试' }] }]);
+          } catch (fallbackError) {
+            console.error('回退更新也失败:', fallbackError);
+          }
+        }, 100);
       }
     }
-  }, [content, editor]);
-
-  // 自动保存到服务器
+  }, [editor, initialValue]);
+  
+  // 自动保存功能
   useEffect(() => {
     if (!editor || !id) return;
 
-    // 监听内容变化并保存
-    const handleContentChange = () => {
-      if (editor.children && editor.children.length > 0 && 
-          editor.children[0].children && editor.children[0].children[0].text) {
-        fetch('/api/docs', {
+    const handleContentChange = async () => {
+      try {
+        const response = await fetch('/api/docs', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -94,20 +172,27 @@ export default function EditorCore({ id, content, title }: { id: string; content
             action: 'update'
           }),
         });
+        
+        if (!response.ok) {
+          console.error('保存文档失败:', await response.json());
+        }
+      } catch (error) {
+        console.error('保存请求异常:', error);
       }
     };
 
-    // 设置定时保存
-    const saveInterval = setInterval(handleContentChange, 5000); // 每5秒自动保存
-
+    const saveInterval = setInterval(handleContentChange, 5000);
     return () => clearInterval(saveInterval);
   }, [editor, id, title]);
 
   return (
     <Plate editor={editor}>
-      <EditorContainer variant="demo">
-        <Editor />
+      <EditorContainer variant="default">
+        <Editor variant="default" />
       </EditorContainer>
     </Plate>
   );
 }
+
+
+

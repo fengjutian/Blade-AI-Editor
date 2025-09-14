@@ -57,6 +57,7 @@ import dayjs from 'dayjs';
 //    // 在文件顶部添加导入
 //            import 'client-only';
 import React, { useEffect, useRef, useState } from 'react';
+import ClientOnlyWrapper from '@/components/ui/no-ssr-speech-button';
 
 type BubbleDataType = {
   role: string;
@@ -485,7 +486,9 @@ export const Copilot = (props: CopilotProps) => {
               const { SendButton, LoadingButton, SpeechButton } = info.components;
               return (
                 <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                  <SpeechButton className={styles.speechButton} />
+                  <ClientOnlyWrapper fallback={<div style={{ width: 32, height: 32 }} />}>
+                    <SpeechButton className={styles.speechButton} />
+                  </ClientOnlyWrapper>
                   {loading ? <LoadingButton type="default" /> : <SendButton type="primary" />}
                 </div>
               );

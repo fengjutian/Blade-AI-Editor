@@ -2,15 +2,42 @@
   "name": "ai-editor",
   "version": "0.1.0",
   "private": true,
+ "main": "electron-start.js",
   "scripts": {
     "dev": "next dev --turbopack",
-    "dist": "npm run build && electron-builder",
-    "dev:electron": "wait-on http://localhost:3000 && electron .",
-    "dev:electron1": "concurrently \"npm run dev:next\" \"npm run dev:electron\"",
+    "dev:next": "next dev --turbopack",
     "build": "next build",
+    "start": "next start",
+   "dev:electron": "wait-on http://localhost:3000 && electron .",
+    "dev:all": "concurrently \"npm run dev:next\" \"npm run dev:electron\" \"npm run dev:yjs\"",
+    "package": "electron-builder build --dir",
+    "dist": "npm run build && electron-builder",
     "lint": "next lint",
-    "dev:yjs": "node yjs-server.js",
-    "dev:all": "concurrently \"npm run dev\" \"npm run dev:yjs\""
+    "dev:yjs": "node yjs-server.js"
+  },
+  "build": {
+    "appId": "com.aieditor.app",
+    "productName": "AI Editor",
+    "files": [
+      "out/**/*",
+      "electron-main.ts",
+      "public/**/*"
+    ],
+    "directories": {
+      "buildResources": "public"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "public/favicon.ico"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "public/favicon.ico"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "public/favicon.ico"
+    }
   },
   "dependencies": {
     "@ai-sdk/openai": "^1.3.22",
@@ -131,6 +158,7 @@
     "uploadthing": "7.7.2",
     "use-file-picker": "2.1.2",
     "uuid": "^11.1.0",
+    "ws": "^8.18.3",
     "y-websocket": "^3.0.0",
     "yjs": "^13.6.27",
     "zod": "^3.25.67",
@@ -144,13 +172,9 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "concurrently": "^9.2.1",
-    "eslint": "^9",
-    "eslint-config-next": "15.3.4",
-    "prisma": "^6.12.0",
-    "tailwindcss": "^4",
-    "tsx": "^4.20.3",
-    "tw-animate-css": "^1.3.4",
-    "typescript": "^5",
-    "y-leveldb": "^0.2.0"
+    "electron": "^32.1.0",
+    "electron-builder": "^25.1.8",
+    "ts-node": "^10.9.2",
+    "wait-on": "^8.0.1"
   }
 }
