@@ -1,4 +1,3 @@
-// Before: Static import (causes SSR issues)
 'use client';
 
 import styles from './index.module.css';

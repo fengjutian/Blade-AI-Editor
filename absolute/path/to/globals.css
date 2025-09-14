@@ -1,0 +1,32 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+@custom-variant dark (&:is(.dark *));
+
+/* 保留现有的@theme和:root配置 */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  /* ... 其余主题变量保持不变 ... */
+}
+
+:root {
+  --radius: 0.625rem;
+  --background: oklch(1 0 0);
+  /* ... 其余变量保持不变 ... */
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  /* ... 其余变量保持不变 ... */
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
