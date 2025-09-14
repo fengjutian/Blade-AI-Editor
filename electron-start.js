@@ -1,5 +1,5 @@
 // 配置ts-node使用CommonJS模块模式
-process.env.TS_NODE_COMPILER_OPTIONS = '{"module": "CommonJS"}';
+process.env.TS_NODE_COMPILER_OPTIONS = '{"module": "CommonJS", "moduleResolution": "node"}';
 
 // 配置ts-node忽略tsconfig.json中的模块解析设置
 process.env.TS_NODE_PROJECT = 'tsconfig.electron.json';
