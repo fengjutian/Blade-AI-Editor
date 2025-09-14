@@ -15,6 +15,8 @@ function createWindow() {
       contextIsolation: true,
       preload: path.join(__dirname, 'preload.js'),
     },
+
+    // 移除 devTools 选项，在开发模式下通过 mainWindow.webContents.openDevTools() 打开开发者工具
   });
 
   // 设置应用菜单
