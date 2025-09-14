@@ -7,7 +7,7 @@ import { Editor, EditorContainer } from '@/components/ui/editor';
 import { DocItem } from '@/app/PageType';
 
 // 专门处理Slate文档结构的函数，确保正确提取text属性
-const getValidContent = (inputContent: any) => {
+const getValidContent = (inputContent: any): any[] => {
   console.log('处理前的内容类型:', typeof inputContent, Array.isArray(inputContent));
   console.log('原始内容:', inputContent);
   
@@ -42,11 +42,19 @@ const getValidContent = (inputContent: any) => {
       };
     }
     
-    // 检查是否已经是有效的Slate文档结构
-    if (item.children && Array.isArray(item.children)) {
+    // 检查是否已经是有效的Slate文档结构（用户提供的数据结构）
+    if (item.type && item.children && Array.isArray(item.children)) {
+      // 直接返回结构，确保保持原有类型
       return {
-        type: item.type || 'p',
-        children: processChildren(item.children)
+        type: item.type,
+        children: item.children.map((child: any) => {
+          if (typeof child === 'object' && child !== null && 'text' in child) {
+            return { text: String(child.text || '') };
+          }
+          return { text: String(child || '') };
+        }),
+        // 保留原始id等其他属性
+        ...Object.fromEntries(Object.entries(item).filter(([key]) => key !== 'type' && key !== 'children'))
       };
     }
     
@@ -58,26 +66,6 @@ const getValidContent = (inputContent: any) => {
   });
 };
 
-// 处理子节点数组
-const processChildren = (children: any[]): { text: string }[] => {
-  return children.map((child: any) => {
-    // 文本字符串直接包装
-    if (typeof child === 'string') {
-      return { text: child };
-    }
-    // 有text属性的对象
-    if (typeof child === 'object' && child !== null && 'text' in child) {
-      return { text: String(child.text || '') };
-    }
-    // 其他对象尝试提取文本
-    if (typeof child === 'object' && child !== null) {
-      return { text: extractTextFromObject(child) };
-    }
-    // 默认处理
-    return { text: String(child || '') };
-  });
-};
-
 // 从对象中提取文本内容的辅助函数
 const extractTextFromObject = (obj: any): string => {
   // 检查常见的文本属性
@@ -85,36 +73,56 @@ const extractTextFromObject = (obj: any): string => {
   if (obj.content && typeof obj.content === 'string') return obj.content;
   if (obj.value && typeof obj.value === 'string') return obj.value;
   
+  // 特殊处理children数组中的text
+  if (obj.children && Array.isArray(obj.children)) {
+    const textFromChildren = obj.children
+      .map((child: any) => {
+        if (child.text) return child.text;
+        if (typeof child === 'string') return child;
+        return extractTextFromObject(child);
+      })
+      .join(' ');
+    
+    return textFromChildren || JSON.stringify(obj);
+  }
+  
   // 如果是数组，递归处理
-  if (Array.isArray(obj.content)) {
-    return obj.content.map((item: any) => extractTextFromObject(item)).join(' ');
+  if (Array.isArray(obj)) {
+    return obj.map((item: any) => extractTextFromObject(item)).join(' ');
   }
   
-  // 遍历所有属性寻找可能的文本
-  let text = '';
-  for (const key in obj) {
-    if (typeof obj[key] === 'string') {
-      text += obj[key] + ' ';
-    } else if (typeof obj[key] === 'object' && obj[key] !== null) {
-      text += extractTextFromObject(obj[key]) + ' ';
-    }
-  }
-  
-  // 如果没有找到文本，返回对象的字符串表示
-  return text.trim() || String(obj);
+  // 默认返回对象的字符串表示
+  return String(obj);
 };
 
 export default function EditorCore({ id, content, title }: { id: string; content: DocItem['content']; title: string }) {
   // 获取有效的初始内容
-  const initialValue = useMemo(() => getValidContent(content), [content]);
-  
-  console.log('处理后的内容:', initialValue);
+  const initialValue = useMemo(() => {
+    const processed = getValidContent(content);
+    console.log('处理后的内容:', processed);
+    return processed;
+  }, [content]);
   
   // 创建编辑器实例
   const editor = usePlateEditor({
     plugins: EditorKit,
     value: initialValue
   });
+  
+  // 确保内容更新
+  useEffect(() => {
+    if (editor) {
+      try {
+        // 直接更新编辑器内容
+        editor.children = initialValue;
+        editor.onChange();
+      } catch (error) {
+        console.error('更新编辑器内容失败:', error);
+        editor.children = [{ type: 'p', children: [{ text: '内容加载失败' }] }];
+        editor.onChange();
+      }
+    }
+  }, [editor, initialValue]);
   
   // 自动保存功能
   useEffect(() => {
