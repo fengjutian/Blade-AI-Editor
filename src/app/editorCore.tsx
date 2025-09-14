@@ -187,9 +187,8 @@ export default function EditorCore({ id, content, title }: { id: string; content
 
   return (
     <Plate editor={editor}>
-      {/* 使用variant="default"代替className="h-full"，符合组件设计规范 */}
       <EditorContainer variant="default">
-        <Editor />
+        <Editor variant="default" />
       </EditorContainer>
     </Plate>
   );

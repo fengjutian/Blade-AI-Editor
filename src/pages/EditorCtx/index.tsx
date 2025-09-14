@@ -1,7 +1,7 @@
 // Before: Static import (causes SSR issues)
 'use client';
 
-import './index.module.css';
+import styles from './index.module.css';
 import EditorCore from "@/app/editorCore";
 import React, { useEffect, useState } from "react";
 import { DocItem } from "@/app/PageType";
@@ -124,11 +124,11 @@ export default function EditorCtx({ operator, docList, setOperator }: { operator
   }, [])
 
   return (
-    <div className="editor-ctx-container">
+    <div className={styles['editor-ctx-container']}>
       {/* 所有文档 */}
       {operatorState === Operator.AllDoc && (
-        <div className="docs-list-container">
-          <h2 className="page-title">所有文档</h2>
+        <div className={styles['docs-list-container']}>
+          <h2 className={styles['page-title']}>所有文档</h2>
           <List
             bordered
             dataSource={doc}
@@ -157,19 +157,19 @@ export default function EditorCtx({ operator, docList, setOperator }: { operator
 
       {/* 日历 */}
       {operatorState === Operator.Calendar && (
-        <div className="calendar-container">
-          <h2 className="page-title">日历</h2>
+        <div className={styles['calendar-container']}>
+          <h2 className={styles['page-title']}>日历</h2>
           <CalendarEle />
         </div>
       )}
 
       {/* 编辑 */}
       {operatorState === Operator.EditDoc && (
-        <div className="editor-container">
-          <div className="editor-header">
-            <h2 className="page-title">{curDoc.title || '无标题文档'}</h2>
+        <div className={styles['editor-container']}>
+          <div className={styles['editor-header']}>
+            <h2 className={styles['page-title']}>{curDoc.title || '无标题文档'}</h2>
           </div>
-          <div className="editor-content">
+          <div className={styles['editor-content']}>
             <EditorCore id={curDoc.id} title={curDoc.title} content={curDoc.content}/>
           </div>
         </div>
