@@ -11,7 +11,61 @@ import type { Doc as YDoc } from 'yjs';
 import type { WebsocketProvider } from 'y-websocket';
 
 export default function EditorCore({ id, content, title }: { id: string; content: any[]; title: string }) {
-  const initialValue: any[] = content ?? [];
+  // 确保初始值总是有效的Slate节点结构
+  const getValidContent = (inputContent: any) => {
+    if (!inputContent) {
+      return [{ type: 'p', children: [{ text: '' }] }];
+    }
+    
+    let parsedContent;
+    if (typeof inputContent === 'string') {
+      try {
+        parsedContent = JSON.parse(inputContent);
+      } catch {
+        return [{ type: 'p', children: [{ text: inputContent }] }];
+      }
+    } else {
+      parsedContent = inputContent;
+    }
+    
+    if (!Array.isArray(parsedContent) || parsedContent.length === 0) {
+      return [{ type: 'p', children: [{ text: '' }] }];
+    }
+    
+    return parsedContent.map(node => {
+      if (!node || typeof node !== 'object') {
+        return { type: 'p', children: [{ text: String(node || '') }] };
+      }
+      
+      // 确保每个节点都有children属性
+      if (!node.children || !Array.isArray(node.children)) {
+        return {
+          ...node,
+          type: node.type || 'p',
+          children: [{ text: node.text || '' }]
+        };
+      }
+      
+      // 递归处理children
+      const validChildren = node.children.map((child: any) => {
+        if (!child || typeof child !== 'object') {
+          return { text: String(child || '') };
+        }
+        if (child.text !== undefined) {
+          return { text: String(child.text) };
+        }
+        return child;
+      });
+      
+      return {
+        ...node,
+        type: node.type || 'p',
+        children: validChildren
+      };
+    });
+  };
+
+  const initialValue = getValidContent(content);
   const [collaborationManager, setCollaborationManager] = useState<any>(null);
   const [yDoc, setYDoc] = useState<YDoc | null>(null);
   const [provider, setProvider] = useState<WebsocketProvider | null>(null);
@@ -37,42 +91,35 @@ export default function EditorCore({ id, content, title }: { id: string; content
 
   // 创建编辑器配置
   const editorConfig = useMemo(() => {
-    if (!yDoc || !collaborationManager) {
-      return {
-        plugins: EditorKit,
-        value: () => Array.isArray(initialValue) ? initialValue : []
-      };
-    }
-
     return {
-      plugins: [...EditorKit],
-      value: () => Array.isArray(initialValue) ? initialValue : [],
-      // 使用正确的API名称
-      editor: withYjs({
-        yDoc,
-        // 可以在这里添加其他Yjs相关配置
-      })
+      plugins: EditorKit,
+      value: initialValue
     };
-  }, [yDoc, collaborationManager, initialValue]);
+  }, [initialValue]);
 
   // 创建支持协同的编辑器
   const editor = usePlateEditor(editorConfig);
 
-  // 初始化内容和自动保存逻辑保持不变
+  // 简化内容初始化逻辑
   useEffect(() => {
-    // 初始化内容
-    if (content && editor) {
-      try {
-        const parseContent = JSON.parse(content);
-        if (parseContent.length > 0) {
-          // 根据实际的编辑器API设置内容
-          editor.children = parseContent;
+    if (!editor) return;
+    
+    // 使用Slate API正确设置初始内容
+    if (initialValue && initialValue.length > 0) {
+      // 等待下一个事件循环再设置内容，确保编辑器已经初始化完成
+      setTimeout(() => {
+        try {
+          editor.tf.reset();
+          editor.tf.insertNodes(initialValue);
+        } catch (error) {
+          console.error('初始化内容失败:', error);
+          // 如果设置失败，至少确保有一个空段落
+          editor.tf.reset();
+          editor.tf.insertNodes([{ type: 'p', children: [{ text: '' }] }]);
         }
-      } catch (error) {
-        console.error('解析内容失败:', error);
-      }
+      }, 0);
     }
-  }, [content, editor]);
+  }, [editor, initialValue]);
 
   // 自动保存到服务器
   useEffect(() => {
