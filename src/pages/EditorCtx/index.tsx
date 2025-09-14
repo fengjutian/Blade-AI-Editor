@@ -124,11 +124,11 @@ export default function EditorCtx({ operator, docList, setOperator }: { operator
   }, [])
 
   return (
-    <div className="title">
-
+    <div className="editor-ctx-container">
       {/* 所有文档 */}
-      {
-        operatorState === Operator.AllDoc && (
+      {operatorState === Operator.AllDoc && (
+        <div className="docs-list-container">
+          <h2 className="page-title">所有文档</h2>
           <List
             bordered
             dataSource={doc}
@@ -152,22 +152,28 @@ export default function EditorCtx({ operator, docList, setOperator }: { operator
             </List.Item>
           }
           />
-        )
-      }
+        </div>
+      )}
 
       {/* 日历 */}
-      {
-        operatorState === Operator.Calendar && (
+      {operatorState === Operator.Calendar && (
+        <div className="calendar-container">
+          <h2 className="page-title">日历</h2>
           <CalendarEle />
-        )
-      }
+        </div>
+      )}
 
       {/* 编辑 */}
-      {
-        operatorState === Operator.EditDoc && (
-          <EditorCore id={curDoc.id} title={curDoc.title} content={curDoc.content}/>
-        )
-      }
+      {operatorState === Operator.EditDoc && (
+        <div className="editor-container">
+          <div className="editor-header">
+            <h2 className="page-title">{curDoc.title || '无标题文档'}</h2>
+          </div>
+          <div className="editor-content">
+            <EditorCore id={curDoc.id} title={curDoc.title} content={curDoc.content}/>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

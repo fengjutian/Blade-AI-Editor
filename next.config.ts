@@ -5,10 +5,6 @@ import path from 'path';
 
 const nextConfig: NextConfig = {
   transpilePackages: ['@douyinfe/semi-ui', '@douyinfe/semi-icons', '@douyinfe/semi-illustrations'],
-  future: {
-    webpack5: true, // by default, if you customize webpack config, they switch back to version 4.
-      // Looks like backward compatibility approach.
-  },
   webpack: (config,
     { buildId, dev, isServer, defaultLoaders, nextRuntime, webpack }) => {
     config.resolve.alias = {

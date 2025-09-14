@@ -5,6 +5,60 @@
   font-size: 32px;
 }
 
+/* 定义主容器 */
+.editor-ctx-container {
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+}
+
+/* 页面标题 */
+.page-title {
+  color: #4caf50;
+  font-size: 24px;
+  margin: 16px 20px;
+  padding: 0;
+}
+
+/* 文档列表容器 */
+.docs-list-container {
+  flex: 1;
+  overflow: auto;
+  padding: 16px;
+}
+
+/* 日历容器 */
+.calendar-container {
+  flex: 1;
+  overflow: auto;
+  padding: 16px;
+}
+
+/* 编辑器容器 */
+.editor-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* 编辑器头部 */
+.editor-header {
+  border-bottom: 1px solid #e0e0e0;
+  padding: 8px 20px;
+  background-color: #fafafa;
+}
+
+/* 编辑器内容区域 */
+.editor-content {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
 
 .siderBarWrap{
   /* background: lightblue; */

@@ -32,7 +32,7 @@ const getValidContent = (inputContent: any): any[] => {
   // 规范化为数组
   const contentArray = Array.isArray(inputContent) ? inputContent : [inputContent];
   
-  // 处理每个节点
+  // 处理每个节点，增强验证
   return contentArray.map((item: any) => {
     // 基本类型或null处理
     if (item === null || typeof item !== 'object') {
@@ -42,19 +42,40 @@ const getValidContent = (inputContent: any): any[] => {
       };
     }
     
-    // 检查是否已经是有效的Slate文档结构（用户提供的数据结构）
+    // 检查是否已经是有效的Slate文档结构
     if (item.type && item.children && Array.isArray(item.children)) {
-      // 直接返回结构，确保保持原有类型
+      // 验证和清理children
+      const validChildren = item.children.map((child: any) => {
+        // 确保 text 节点的安全性
+        if (typeof child === 'object' && child !== null && 'text' in child) {
+          return { text: String(child.text || '') };
+        }
+        // 如果是字符串，转换为text节点
+        if (typeof child === 'string') {
+          return { text: child };
+        }
+        // 其他情况转换为空文本
+        return { text: String(child || '') };
+      });
+      
+      // 确保至少有一个children
+      if (validChildren.length === 0) {
+        validChildren.push({ text: '' });
+      }
+      
       return {
         type: item.type,
-        children: item.children.map((child: any) => {
-          if (typeof child === 'object' && child !== null && 'text' in child) {
-            return { text: String(child.text || '') };
-          }
-          return { text: String(child || '') };
-        }),
-        // 保留原始id等其他属性
-        ...Object.fromEntries(Object.entries(item).filter(([key]) => key !== 'type' && key !== 'children'))
+        children: validChildren,
+        // 保留原始属性，但过滤掉不安全的属性
+        ...Object.fromEntries(
+          Object.entries(item).filter(([key, value]) => {
+            // 只保留安全的属性
+            return key !== 'type' && key !== 'children' && 
+                   typeof value !== 'function' && 
+                   (typeof value !== 'object' || 
+                    (typeof value === 'object' && value !== null && !Array.isArray(value)));
+          })
+        )
       };
     }
     
@@ -63,7 +84,7 @@ const getValidContent = (inputContent: any): any[] => {
       type: 'p',
       children: [{ text: extractTextFromObject(item) }]
     };
-  });
+  }).filter(Boolean); // 过滤掉可能的空值
 };
 
 // 从对象中提取文本内容的辅助函数
@@ -103,23 +124,32 @@ export default function EditorCore({ id, content, title }: { id: string; content
     return processed;
   }, [content]);
   
-  // 创建编辑器实例
+  // 创建编辑器实例，先不集成协同功能避免错误
   const editor = usePlateEditor({
     plugins: EditorKit,
     value: initialValue
   });
   
-  // 确保内容更新
+  // 确保内容更新 - 使用正确的 Slate API
   useEffect(() => {
-    if (editor) {
+    if (editor && initialValue) {
       try {
-        // 直接更新编辑器内容
-        editor.children = initialValue;
-        editor.onChange();
+        // 使用 Slate 的正确 API 来更新内容
+        setTimeout(() => {
+          editor.tf.reset();
+          editor.tf.insertNodes(initialValue);
+        }, 0);
       } catch (error) {
         console.error('更新编辑器内容失败:', error);
-        editor.children = [{ type: 'p', children: [{ text: '内容加载失败' }] }];
-        editor.onChange();
+        // 使用安全的回退方案
+        setTimeout(() => {
+          try {
+            editor.tf.reset();
+            editor.tf.insertNodes([{ type: 'p', children: [{ text: '内容加载失败，请刷新页面重试' }] }]);
+          } catch (fallbackError) {
+            console.error('回退更新也失败:', fallbackError);
+          }
+        }, 100);
       }
     }
   }, [editor, initialValue]);
@@ -163,4 +193,5 @@ export default function EditorCore({ id, content, title }: { id: string; content
     </Plate>
   );
 }
+
 
