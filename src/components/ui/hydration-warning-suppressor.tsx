@@ -21,8 +21,10 @@ export default function HydrationWarningSupressor() {
       'data-bitwarden-watching',
       'hydrated but some attributes',
       'browser extension',
+      'received `true` for a non-boolean attribute',
+      'non-boolean attribute',
     ];
-    
+
     const shouldSuppressWarning = (message: string) => {
       return extensionPatterns.some(pattern => 
         message.toLowerCase().includes(pattern.toLowerCase())

@@ -121,7 +121,7 @@ export default function EditorCtx({ operator, docList, setOperator }: { operator
               extra={
                 <ButtonGroup theme="borderless">
                   <Button>编辑</Button>
-                  <Button danger onClick={(e) => deleteDoc(e, item.id)}>删除</Button>
+                  <Button type="danger" onClick={(e) => deleteDoc(e, item.id)}>删除</Button>
                   <Button>更多</Button>
                 </ButtonGroup>
               }

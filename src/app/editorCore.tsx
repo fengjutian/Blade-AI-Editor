@@ -48,7 +48,7 @@ export default function EditorCore({ id, content, title }: { id: string; content
       plugins: [...EditorKit],
       value: () => Array.isArray(initialValue) ? initialValue : [],
       // 使用正确的API名称
-      editor: withTYjs({
+      editor: withYjs({
         yDoc,
         // 可以在这里添加其他Yjs相关配置
       })
