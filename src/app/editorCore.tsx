@@ -192,6 +192,7 @@ export default function EditorCore({ id, content, title }: { id: string; content
         <Editor className="h-full w-full" />
       </EditorContainer>
     </Plate>
+
   );
 }
 
