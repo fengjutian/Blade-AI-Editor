@@ -185,12 +185,14 @@ export default function EditorCore({ id, content, title }: { id: string; content
     return () => clearInterval(saveInterval);
   }, [editor, id, title]);
 
+  // 修改组件返回部分
   return (
     <Plate editor={editor}>
-      <EditorContainer variant="default">
-        <Editor variant="default" />
+      <EditorContainer className="h-full w-full">
+        <Editor className="h-full w-full" />
       </EditorContainer>
     </Plate>
+
   );
 }
 

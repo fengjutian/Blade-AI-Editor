@@ -1,23 +1,15 @@
-<<<<<<< HEAD
+
 'use client';
 import './index.module.css';
-=======
-// Before: Static import (causes SSR issues)
-'use client';
 
 import styles from './index.module.css';
->>>>>>> 31c46778ff1379c0cd848ddc66fd910da3a3df7d
 import EditorCore from "@/app/editorCore";
 import React, { useEffect, useState } from "react";
 import { DocItem } from "@/app/PageType";
 import { Operator } from "@/app/scheme";
 import { List, Avatar, ButtonGroup, Button } from '@douyinfe/semi-ui';
 import dynamic from 'next/dynamic';
-<<<<<<< HEAD
-import { logger, Logger } from '@/utils/logger';
-=======
 import { logger, Logger, LogLevel } from '@/utils/logger'; // 修改导入，同时导入Logger类
->>>>>>> 31c46778ff1379c0cd848ddc66fd910da3a3df7d
 
 // Dynamically import the calendar component with SSR disabled
 const CalendarEle = dynamic(() => import('@/app/widgets/calendar'), {
