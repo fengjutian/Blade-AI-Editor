@@ -22,7 +22,7 @@ export class Logger {
   private level: LogLevel;
   private prefix?: string;
   private showTimestamp: boolean;
-  private static instance: Logger;
+  private static instances: Record<string, Logger> = {};
 
   private constructor(config: LoggerConfig = { level: LogLevel.INFO, showTimestamp: true }) {
     this.level = config.level;
@@ -33,16 +33,16 @@ export class Logger {
   /**
    * 获取Logger单例实例
    */
-  public static getInstance(config?: LoggerConfig): Logger {
-    if (!Logger.instance) {
-      Logger.instance = new Logger(config);
-    } else if (config) {
+  public static getInstance(name: string = 'default', config?: LoggerConfig): Logger {
+    if (!Logger.instances[name]) {
+      Logger.instances[name] = new Logger(config);
+    } else if (name in Logger.instances && config) {
       // 更新已存在实例的配置
-      if (config.level) Logger.instance.level = config.level;
-      if (config.prefix !== undefined) Logger.instance.prefix = config.prefix;
-      if (config.showTimestamp !== undefined) Logger.instance.showTimestamp = config.showTimestamp;
+      if (config.level) Logger.instances[name].level = config.level;
+      if (config.prefix !== undefined) Logger.instances[name].prefix = config.prefix;
+      if (config.showTimestamp !== undefined) Logger.instances[name].showTimestamp = config.showTimestamp;
     }
-    return Logger.instance;
+    return Logger.instances[name];
   }
 
   /**

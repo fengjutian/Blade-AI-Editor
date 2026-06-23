@@ -1,6 +1,6 @@
 'use client';
 import * as React from 'react';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useRef, useCallback } from 'react';
 import { Plate, usePlateEditor } from 'platejs/react';
 import { EditorKit } from '@/components/editor-kit';
 import { Editor, EditorContainer } from '@/components/ui/editor';
@@ -118,6 +118,12 @@ const extractTextFromObject = (obj: any): string => {
 
 export default function EditorCore({ id, content, title }: { id: string; content: DocItem['content']; title: string }) {
   // 获取有效的初始内容
+  const saveTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const idRef = useRef(id);
+  const titleRef = useRef(title);
+  idRef.current = id;
+  titleRef.current = title;
+
   const initialValue = useMemo(() => {
     const processed = getValidContent(content);
     console.log('处理后的内容:', processed);
@@ -129,6 +135,33 @@ export default function EditorCore({ id, content, title }: { id: string; content
     plugins: EditorKit,
     value: initialValue
   });
+
+  const saveDoc = useCallback(async () => {
+      const response = await fetch('/api/docs', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: idRef.current,
+          title: titleRef.current,
+          content: JSON.stringify(editor.children),
+          action: 'update'
+        }),
+      });
+      if (!response.ok) {
+        console.error('Save failed', await response.json());
+      }
+    } catch (error) {
+      console.error('Save error', error);
+    }
+  }, [editor]);
+
+  const debouncedSave = useCallback(() => {
+    saveTimerRef.current = setTimeout(saveDoc, 2000);
+  }, [saveDoc]);
+
+  useEffect(() = >    return () = >      if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
+    };
+  }, []);
   
   // 确保内容更新 - 使用正确的 Slate API
   useEffect(() => {
@@ -154,40 +187,9 @@ export default function EditorCore({ id, content, title }: { id: string; content
     }
   }, [editor, initialValue]);
   
-  // 自动保存功能
-  useEffect(() => {
-    if (!editor || !id) return;
-
-    const handleContentChange = async () => {
-      try {
-        const response = await fetch('/api/docs', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            id: id,
-            title: title,
-            content: JSON.stringify(editor.children),
-            action: 'update'
-          }),
-        });
-        
-        if (!response.ok) {
-          console.error('保存文档失败:', await response.json());
-        }
-      } catch (error) {
-        console.error('保存请求异常:', error);
-      }
-    };
-
-    const saveInterval = setInterval(handleContentChange, 5000);
-    return () => clearInterval(saveInterval);
-  }, [editor, id, title]);
-
   // 修改组件返回部分
   return (
-    <Plate editor={editor}>
+    <Plate editor={editor} onChange={debouncedSave}>
       <EditorContainer className="h-full w-full">
         <Editor className="h-full w-full" />
       </EditorContainer>
