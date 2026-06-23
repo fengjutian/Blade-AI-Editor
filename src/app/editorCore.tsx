@@ -159,7 +159,9 @@ export default function EditorCore({ id, content, title }: { id: string; content
     saveTimerRef.current = setTimeout(saveDoc, 2000);
   }, [saveDoc]);
 
-  useEffect(() = >    return () = >      if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
+  useEffect(() => {
+    return () => {
+      if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
     };
   }, []);
   

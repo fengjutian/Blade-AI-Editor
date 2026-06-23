@@ -13,7 +13,9 @@
     "package": "electron-builder build --dir",
     "dist": "npm run build && electron-builder",
     "lint": "next lint",
-    "dev:yjs": "node yjs-server.js"
+    "dev:yjs": "node yjs-server.js",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "build": {
     "appId": "com.aieditor.app",
@@ -175,6 +177,8 @@
     "ts-node": "^10.9.2",
     "wait-on": "^8.0.1",
     "@faker-js/faker": "^9.8.0",
-    "less-loader": "12.2.0"
+    "less-loader": "12.2.0",
+    "vitest": "2.1.0",
+    "@vitejs/plugin-react": "4.3.0"
   }
 }
